@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 
+
 @Entity
 @Table(name="student")
 public class Student {

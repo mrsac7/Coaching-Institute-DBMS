@@ -4,7 +4,7 @@
 
 <div id="logo">
     <div id="logo_text">
-      <h1><a href="/">Vision Kids Planet <span class="logo_colour">School</span></a></h1>
-      <h2>Be safe. Be kind. Be smart.</h2>
+      <h1><a href="/">Star Coaching <span class="logo_colour">Institute</span></a></h1>
+      <h2>Aim For Excellence.</h2>
     </div>
 </div>

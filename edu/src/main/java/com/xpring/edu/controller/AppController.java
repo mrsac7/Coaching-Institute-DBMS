@@ -2,9 +2,11 @@ package com.xpring.edu.controller;
 
 import java.security.Principal;
 
+import com.xpring.edu.model.Enrollment;
 import com.xpring.edu.model.Guardian;
 import com.xpring.edu.model.Student;
 import com.xpring.edu.model.Teacher;
+import com.xpring.edu.model.Transaction;
 
 // import java.security.Principal;
 
@@ -12,9 +14,12 @@ import com.xpring.edu.model.Teacher;
 // import java.util.List;
 
 import com.xpring.edu.model.User;
+import com.xpring.edu.services.EnrollmentService;
+// import com.xpring.edu.services.EnrollmentService;
 import com.xpring.edu.services.GuardianService;
 import com.xpring.edu.services.StudentService;
 import com.xpring.edu.services.TeacherService;
+import com.xpring.edu.services.TransactionService;
 import com.xpring.edu.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +48,11 @@ public class AppController {
     @Autowired
     private TeacherService teacherService;
 
+    @Autowired
+    private EnrollmentService enrollmentService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @GetMapping("/")
     public String main(Model model){
@@ -88,9 +98,22 @@ public class AppController {
     }
 
     @GetMapping("/enrollment")
-    public String enrollment(Model model) {
+    public String enrollment(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userService.getUser(username);
+        if (user == null) {
+            return "redirect:/home";
+        }
+        else if (user.getRole().equals("ROLE_STUDENT")) {
+            Student student = studentService.getStudentByUsername(username);
+            Guardian guardian = guardianService.getGuardian(student.getStudentID());
+            model.addAttribute("userX", user);
+            model.addAttribute("student", student);
+            model.addAttribute("guardian", guardian);
+        }
         return "enrollment";
     }
+
 
     @GetMapping("/attendance")
     public String attendance(Model model) {
@@ -111,13 +134,13 @@ public class AppController {
     @GetMapping("/profile/{username}")
     public String profile(@PathVariable String username, Model model) {
         User user = userService.getUser(username);
-        // System.out.println(user.getRole());
         if (user == null) {
             return "redirect:/home";
         }
         else if (user.getRole().equals("ROLE_STUDENT")) {
             Student student = studentService.getStudentByUsername(username);
             Guardian guardian = guardianService.getGuardian(student.getStudentID());
+
             model.addAttribute("userX", user);
             model.addAttribute("student", student);
             model.addAttribute("guardian", guardian);
@@ -129,7 +152,7 @@ public class AppController {
         }
         return "profile";
     }
-    
+
     @PostMapping("/register")
     public void processRegister(User user, Model model) {
         userService.saveUser(user);
@@ -170,5 +193,14 @@ public class AppController {
     public String updateTeacherProfile(@PathVariable String username, Teacher teacher, Model model) {
         teacherService.updateTeacher(teacher);
         return "redirect:/profile/"+username;
+    }
+
+    @PostMapping("/enrollment")
+    public void processEnrollment(Model model, Student student, Enrollment enrollment, Transaction transaction) {
+        int transactionID = transactionService.saveTransaction(transaction);
+        // transaction = transactionService.getTransaction(transactionID);
+        enrollment.setTransactionID(transactionID);
+        enrollmentService.saveEnrollment(enrollment);
+        model.addAttribute("message", "Enrollment Successfull!");
     }
 }
