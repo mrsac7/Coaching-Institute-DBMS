@@ -1,37 +1,31 @@
 package com.xpring.edu.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
+
 @Entity
-@Table(name = "users")
+@Table(name="user")
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true, length = 45)
+    private String username;
     private String email;
+    private String role;
+    private String password;   
+    @ColumnDefault("false")
+    private Boolean enabled;
 
-    @Column(nullable = false, length = 64)
-    private String password;
+    
+	public String getUsername() {
+		return username;
+	}
 
-    @Column(nullable = false, length = 20)
-    private String firstName;
-
-    @Column(nullable = false, length = 20)
-    private String lastName;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -50,20 +44,40 @@ public class User {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getRole() {
+        return role;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getLastName() {
-        return lastName;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
+
+    public User() {
+
+    }
+
+    public User(String username, String email, String role, String password, Boolean enabled) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.password = password;
+        this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User [email=" + email + ", enabled=" + enabled + ", password=" + password + ", role=" + role
+                + ", username=" + username + "]";
+    }
+
+    
     
 }
