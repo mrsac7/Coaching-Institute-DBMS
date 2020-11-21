@@ -10,7 +10,6 @@ public class Batch {
     @Id
     private String batchID;
     private String standard;
-    private String name;
     private String roomNo;
 
     public String getBatchID() {
@@ -29,14 +28,6 @@ public class Batch {
         this.standard = standard;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getRoomNo() {
         return roomNo;
     }
@@ -49,10 +40,9 @@ public class Batch {
         
     }
 
-    public Batch(String batchID, String standard, String name, String roomNo) {
+    public Batch(String batchID, String standard, String roomNo) {
         this.batchID = batchID;
         this.standard = standard;
-        this.name = name;
         this.roomNo = roomNo;
     }
     

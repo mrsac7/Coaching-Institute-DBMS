@@ -25,7 +25,12 @@ public class UserRepository {
 
     public List<User> findAll() {
         String sql = "SELECT * FROM User";
-        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(User.class));
+        try {
+            return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(User.class));
+        }
+        catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
     
     public User getUser(String username) {

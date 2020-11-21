@@ -3,15 +3,14 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
+
 <!DOCTYPE HTML>
 <html>
 
 <head>
-    <title>Attendance - StarCoaching</title>
-    <meta name="description" content="website description" />
-    <meta name="keywords" content="website keywords, website keywords" />
-    <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
-    <link rel="stylesheet" type="text/css" href="/style/style.css" />
+    <title>Home - StarCoaching</title>
+    <link rel="stylesheet" type="text/css" href="style/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -20,7 +19,7 @@
             <jsp:include page="logo.jsp" />
             <div id="menubar">
                 <ul id="menu">
-                    <li><a href="/">Home</a></li>
+                    <li class="selected"><a href="/">Home</a></li>
                     <sec:authentication var="user" property="principal" />
                     <sec:authorize access="hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/users">Users</a></li>
@@ -53,6 +52,7 @@
                                 <li><a href="#">Class XII</a></li>
                             </ul>
                         </li>
+                        <li><a href="/attendance/${user.username}">Attendance</a></li>
                         <li><a href="/tests">Result</a></li>
                         <li><a href="/enrollment">Enrollment</a></li>
                     </sec:authorize>
@@ -60,10 +60,12 @@
                         <li>
                             <a>Attendance <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
-                                <li><a href="#">View Attendance</a></li>
-                                <li class="selected"><a href="/take_attenance">Take Attendance</a></li>
+                                <li><a href="/attendance/${user.username}">View Attendance</a></li>
+                                <li><a href="/take_attendance">Take Attendance</a></li>
                             </ul>
                         </li>
+                        <li><a href="/test">Test</a></li>
+                        <li><a href="#">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -77,63 +79,67 @@
                     </sec:authorize>
                 </ul>
             </div>
-            <div id="content_header"></div>
-            <div id="site_content">
-                <jsp:include page="sidebar.jsp" />
-                <div class="content">
-                    <h1>Your Attendance</h1>
-                    <p>${message}</p>
-                    <div>
-                        <form action="/attendance/${user.username}" method="POST">
-                            <div>
-                                <ul id="small-button2">
-                                    <li>
-                                        <span>
-                                            <label for="month"> Choose Month:</label>
-                                            <input id="month" type="month" name="date" placeholder="Choose Date"
-                                                value="${date}">
-                                            </span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <ul id="small-button">
-                                    <li>
-                                        <input style="padding: 4px 15px" type="submit" value="Proceed" />
-                                    </li>
-                                </ul>
-                            </div>
-                        </form>
-                    </div>
-                    <div style="margin-top: 50px">
-                        <table class="hor-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach items="${attendanceList}" var="list">
-                                    <tr>
-                                        <td><fmt:formatDate pattern="dd-MMM-yyyy" value="${list.date}" /></span></td>
-                                        <c:choose>
-                                            <c:when test = "${list.status == 'Present'}">
-                                                <td style="color:#228B22;">${list.status}</td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td style="color:red">${list.status}</td>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <jsp:include page="footer.jsp" />
         </div>
+        <div id="content_header"></div>
+        <div id="site_content">
+            <jsp:include page="sidebar.jsp" />
+            <div class="content">
+                <h1>All Tests</h1>
+                <p>${message}</p>
+                <div>
+                    <ul id="small-button">
+                        <li>
+                            <a href = "/test/add">
+                                <input type="submit" value="Add" />
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <table class="hor-table" style="margin-top: 30px;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Date</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Marks</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${allTest}" var="test">        
+                            <tr>
+                                <td>${test.testID}</td>
+                                <td>${test.testName}</td>
+                                <td>${test.courseID}</td>
+                                <td><fmt:formatDate pattern="dd-MM-yyyy" value="${test.date}" /></td>
+                                <td>${test.startTime}</td>
+                                <td>${test.endTime}</td>
+                                <td>${test.marks}</td>
+                                <td>
+                                    <span>
+                                        <form action="" class="form-button">
+                                            <input type="submit" value="Result">
+                                        </form>
+                                        <form action="/test/${test.testID}/edit" class="form-button">
+                                            <input style= "border: 1px solid  #1a73e8;color: #1a73e8;" type="submit" value="Edit">
+                                        </form>
+                                        <form action="/test/${test.testID}/delete" method = "POST" class="form-button">
+                                            <input style= "border: 1px solid red;color:red;" type="submit" value="Delete">
+                                        </form>
+                                    </span>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+        
+            </div>
+        </div>
+        <jsp:include page="footer.jsp" />
+    </div>
 </body>
 
 </html>

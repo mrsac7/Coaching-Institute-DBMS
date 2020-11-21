@@ -30,8 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/employees/search", "/students/class/{^[0-9]+$}/", "/classes")
                 .permitAll()
                 .antMatchers("/employees/{^[0-9]+$}/", "/students/{^[0-9]+$}/", "/classes/**", "/subjects/**",
-                        "/exams/**", "/results/**", "/credentials/change", "/credentials/{^[a-zA-Z0-9]+$}/change")
-                .hasAnyAuthority("ROLE_ADMIN", "ROLE_EMPLOYEE")
+                        "/exams/**", "/results/**", "/credentials/change", "/credentials/{^[a-zA-Z0-9]+$}/change", "/test", "/edit_test", "/edit_test/{^[a-zA-Z0-9]+$}")
+                .hasAnyAuthority("ROLE_ADMIN", "ROLE_TEACHER")
                 .antMatchers("/credentials/**", "/employees/new", "/employees/{^[0-9]+$}/edit", "/students/new",
                         "/students/{^[0-9]+$}/edit")
                 .hasAnyAuthority("ROLE_ADMIN").anyRequest().authenticated().

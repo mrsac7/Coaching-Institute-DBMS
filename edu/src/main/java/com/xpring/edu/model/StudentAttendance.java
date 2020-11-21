@@ -13,12 +13,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class StudentAttendance {
     
     @Id
-    private int studentID;
-    private int courseID;
-    private int batchID;
+    private int studentID;    
+    private String batchID;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
-    private Boolean isPresent;
+    private String status;
 
     public int getStudentID() {
         return studentID;
@@ -28,19 +27,11 @@ public class StudentAttendance {
         this.studentID = studentID;
     }
 
-    public int getCourseID() {
-        return courseID;
-    }
-
-    public void setCourseID(int courseID) {
-        this.courseID = courseID;
-    }
-
-    public int getBatchID() {
+    public String getBatchID() {
         return batchID;
     }
 
-    public void setBatchID(int batchID) {
+    public void setBatchID(String batchID) {
         this.batchID = batchID;
     }
 
@@ -52,13 +43,26 @@ public class StudentAttendance {
         this.date = date;
     }
 
-    public Boolean getIsPresent() {
-        return isPresent;
+    public String getStatus() {
+        return status;
     }
 
-    public void setIsPresent(Boolean isPresent) {
-        this.isPresent = isPresent;
+    public void setStatus(String status) {
+        this.status = status;
     }
+
+    public StudentAttendance() {
+        
+    }
+
+    public StudentAttendance(int studentID, String batchID, Date date, String status) {
+        this.studentID = studentID;
+        this.batchID = batchID;
+        this.date = date;
+        this.status = status;
+    }
+
+    
 
     
 }

@@ -7,7 +7,7 @@
 <html>
 
 <head>
-    <title>Enrollment - StarCoaching</title>
+    <title>Test - StarCoaching</title>
     <meta name="description" content="website description" />
     <meta name="keywords" content="website keywords, website keywords" />
     <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
@@ -38,7 +38,7 @@
                                     </ul>
                                 </li>
                                 <li><a href="/tests">Tests</a></li>
-                                <li class="selected"><a href="/enrollment">Enrollment</a></li>
+                                <li><a href="/enrollment">Enrollment</a></li>
                             </ul>
                         </li>
                         <li><a href="/attendance">Attendance</a></li>
@@ -53,8 +53,20 @@
                                 <li><a href="#">Class XII</a></li>
                             </ul>
                         </li>
+                        <li><a href="/attendance/${user.username}">Attendance</a></li>
                         <li><a href="/tests">Result</a></li>
-                        <li class="selected"><a href="/enrollment">Enrollment</a></li>
+                        <li><a href="/enrollment">Enrollment</a></li>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
+                        <li class="selected">
+                            <a>Attendance <i class="fa fa-caret-down"></i></a>
+                            <ul id="sub-menu">
+                                <li><a href="/attendance/${user.username}">View Attendance</a></li>
+                                <li><a href="/take_attendance">Take Attendance</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/test">Test</a></li>
+                        <li><a href="#">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -68,36 +80,44 @@
                     </sec:authorize>
                 </ul>
             </div>
+        </div>
         <div id="content_header"></div>
         <div id="site_content">
             <jsp:include page="sidebar.jsp" />
             <div class="content">
-                <h1>Enrollment</h1>
+                <h1>Add Test</h1>
                 <p>${message}</p>
-                <form action="/enrollment" method="POST">
+                <form action="/test/add" method="POST">
                     <ul class="ver-table">
                         <li>
-                            <label>Username:</label>
-                            <span><input class="read" type="text" name="username" value="${user.username}" readonly /></span>
+                            <label>Name:</label>
+                            <span><input type="text" name="testName" placeholder="Name" /></span>
                         </li>
                         <li>
-                            <label>StudentID:</label>
-                            <span><input class="read" type="text" name="studentID" value="${student.studentID}" readonly /></span>
-                        </li>
-                        <li>
-                            <label>Choose Batch:</label>
+                            <label>Course:</label>
                             <span>
-                                <select id="id" name="batchID" aria-placeholder="Choose Batch">
-                                    <option value="CLASS_IX" selected>Class IX</option>
-                                    <option value="CLASS_X">Class X</option>
-                                    <option value="CLASS_XI">Class XI</option>
-                                    <option value="CLASS_XII">Class XII</option>
+                                <select id="id" name="courseID" aria-placeholder="Course ID">
+                                    <c:forEach items="${allCourses}" var="course">
+                                        <option value="${course.courseID}">${course.courseID}</option>
+                                    </c:forEach>
                                 </select>
                             </span>
                         </li>
                         <li>
-                            <label>Amount:</label>
-                            <span><input class="read" type="text" name="amount" value="100" readonly /></span>
+                            <label>Date:</label>
+                            <span><input type="date" name="date" placeholder="Date"></span>
+                        </li>
+                        <li>
+                            <label>Start - End:</label>
+                            <span>
+                                <input type="time" name="stime" placeholder="Start Time">
+                                &nbsp; To &nbsp;
+                                <input type="time" name="etime" placeholder="End Time">
+                            </span>
+                        </li>
+                        <li>
+                            <label>Total Marks:</label>
+                            <span><input type="number" name="marks" placeholder="Marks"></span>
                         </li>
                     </ul>
                     <div class="container">

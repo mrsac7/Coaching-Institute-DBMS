@@ -81,18 +81,54 @@
             <div id="site_content">
                 <jsp:include page="sidebar.jsp" />
                 <div class="content">
-                    <h1>Your Attendance</h1>
+                    <h1>Take Attendance</h1>
                     <p>${message}</p>
                     <div>
-                        <form action="/attendance/${user.username}" method="POST">
+                        <form action="/take_attendance" method="POST">
                             <div>
                                 <ul id="small-button2">
                                     <li>
+                                        <span><input type="date" name="date" placeholder="Choose Date" value="${date}"></span>
+                                    </li>
+                                </ul>
+                                <ul id="small-button2">
+                                    <li>
                                         <span>
-                                            <label for="month"> Choose Month:</label>
-                                            <input id="month" type="month" name="date" placeholder="Choose Date"
-                                                value="${date}">
-                                            </span>
+                                            <select style="padding: 3px" name="batchID" value="${batchID}" aria-placeholder="Choose Batch">
+                                                <c:choose>
+                                                    <c:when test="${batchID == 'CLASS_IX'}">
+                                                        <option value="CLASS_IX" selected>Class IX</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="CLASS_IX">Class IX</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <c:choose>
+                                                    <c:when test="${batchID == 'CLASS_X'}">
+                                                        <option value="CLASS_X" selected>Class X</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="CLASS_X">Class X</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <c:choose>
+                                                    <c:when test="${batchID == 'CLASS_XI'}">
+                                                        <option value="CLASS_XI" selected>Class XI</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="CLASS_XI">Class XI</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <c:choose>
+                                                    <c:when test="${batchID == 'CLASS_XII'}">
+                                                        <option value="CLASS_XII" selected>Class XII</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="CLASS_XII">Class XII</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </select>
+                                        </span>
                                     </li>
                                 </ul>
                             </div>
@@ -109,22 +145,42 @@
                         <table class="hor-table">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
+                                    <th>StudentID</th>
+                                    <th>Student Name</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach items="${attendanceList}" var="list">
+                                <c:forEach items="${allStudents}" var="student">
                                     <tr>
-                                        <td><fmt:formatDate pattern="dd-MMM-yyyy" value="${list.date}" /></span></td>
+                                        <td>${student.studentID}</td>
+                                        <td>${student.firstName} ${student.middleName} ${student.lastName}</td>
                                         <c:choose>
-                                            <c:when test = "${list.status == 'Present'}">
-                                                <td style="color:#228B22;">${list.status}</td>
+                                            <c:when test="${student.status == 'Present'}">
+                                                <td style="color:#228B22;">${student.status}</td>
                                             </c:when>
                                             <c:otherwise>
-                                                <td style="color:red">${list.status}</td>
+                                                <td style="color:red">${student.status}</td>
                                             </c:otherwise>
                                         </c:choose>
+                                        <td>
+                                            <span>
+                                                <form action="/take_attendance/${student.studentID}" method="POST" class="form-button">
+                                                    <input name="date" value="${date}" style="display: none">
+                                                    <input name="studentID" value="${student.studentID}" style="display: none">
+                                                    <input name="batchID" value="${batchID}" style="display: none">
+                                                    <input type="submit" name="status" value="Present" />
+                                                </form> 
+                                                &nbsp;
+                                                <form action="/take_attendance/${student.studentID}" method="POST" class="form-button">
+                                                    <input name="date" value="${date}" style="display: none">
+                                                    <input name="studentID" value="${student.studentID}" style="display: none">
+                                                    <input name="batchID" value="${batchID}" style="display: none">
+                                                    <input style="color: red; border: 1px solid red;" type="submit" name="status" value="Absent" />
+                                                </form>
+                                            </span>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>

@@ -1,5 +1,7 @@
 package com.xpring.edu.services;
 
+import java.util.List;
+
 import com.xpring.edu.model.Student;
 import com.xpring.edu.repository.StudentRepository;
 
@@ -28,5 +30,9 @@ public class StudentService {
     }
     public void updateStudent(Student student) {
         studentRepository.updateStudent(student);
+    }
+
+    public List<Student> getAllByBatch(String batchID) {
+        return studentRepository.getAllByBatch(batchID);
     }
 }

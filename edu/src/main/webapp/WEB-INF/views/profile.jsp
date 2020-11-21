@@ -84,7 +84,7 @@
                         <li>
                             <label>Date Of Birth:</label>
                             <span>
-                                <fmt:formatDate pattern="dd-MMMM-yyyy" value="${student.dateOfBirth}" /></span>
+                                <fmt:formatDate pattern="dd-MMM-yyyy" value="${student.dateOfBirth}" /></span>
                         </li>
                         <li>
                             <label>Sex:</label>

@@ -46,13 +46,18 @@ h5, h6
   letter-spacing: normal;
   padding: 0 0 15px 0;}
 
-a, a:hover
+a
 { outline: none;
-  text-decoration: underline;
-  color: #009FBC;}
+  text-decoration: none;
+  color: #3c4043;
+}
 
-a:hover
-{ text-decoration: none;}
+a:hover {
+  outline: none;
+  text-decoration: none;
+  color: #1a73e8;
+
+}
 
 blockquote
 { margin: 20px 0; 
@@ -93,10 +98,16 @@ ol li
 { margin-left: auto; 
   margin-right: auto;}
 
+#main {
+  position: relative;
+  min-height: 100vh;
+}
+
 #header
 { background: #1d1d1d url(pattern.png) repeat;
   border-bottom: 2px solid  #1a73e8;
-  height: 177px;}
+  height: 177px;
+}
   
 #banner
 { background: transparent url(banner.png) no-repeat;
@@ -188,7 +199,9 @@ ul#menu li a:hover
 { width: 900px;
   overflow: hidden;
   margin: 20px auto 0 auto;
-  padding: 0 0 10px 0;} 
+  padding: 0 0 0 0;
+  padding-bottom: 50px;
+} 
 
 #sidebar_container
 { float: right;
@@ -206,7 +219,8 @@ ul#menu li a:hover
 { color: #444;} 
 
 .sidebar_item ul
-{ margin: 0;} 
+{ margin: 0;
+} 
 
 .content
 { text-align: left;
@@ -220,13 +234,11 @@ ul#menu li a:hover
 .content ul
 { margin: 2px 0 22px 0px;}
 
-.sidebar_item ul li
-{ list-style-type: none;
-  background: url(bullet.png) no-repeat;
-
+.sidebar_item ul li {
+  list-style-type: none;
 
   margin: 0 0 0 0; 
-  padding: 0 0 4px 25px;
+  padding: 0 0 4px 5px;
   line-height: 1.5em;}
 
 #footer
@@ -238,7 +250,9 @@ ul#menu li a:hover
   text-align: center; 
   background: transparent url(pattern.png) repeat;
   border-top: 2px solid  #1a73e8;
-  color: #FFF;}
+  color: #FFF;
+  bottom: 0;
+}
 
 #footer p
 { line-height: 1.7em;
@@ -415,7 +429,41 @@ ul#small-button {
 ul#small-button >li {
   vertical-align: middle;
   margin: 0 !important;
+
 }
+
+ul#small-button2 {
+  margin: 0 10px 0 auto;
+  list-style: none;
+  float: left !important;
+}
+
+ul#small-button2 >li {
+  vertical-align: middle;
+  margin: 0 !important;
+}
+
+ul#small-button3 {
+  margin: 0 10px 0 auto;
+  list-style: none;
+  float: left !important;
+}
+
+ul#small-button3 >li {
+  vertical-align: middle;
+  margin: 0 !important;
+}
+
+#small-button3 input {
+  padding: 3px 10px;
+  box-shadow: none;
+  cursor: pointer;
+  border: 1px solid #228B22;
+  background-color: white;
+  color: #228B22;
+  border-radius: 5px;
+}
+
 #small-button input {
   border-radius: 4px;
   padding: 3px 15px;
@@ -433,4 +481,18 @@ ul#small-button >li {
 
 .read:focus {
   outline:none;
+}
+
+.form-button {
+  display: inline-block;
+}
+.form-button input {
+  font-size: 12px;
+  padding: 2px 8px;
+  box-shadow: none;
+  cursor: pointer;
+  border: 1px solid #228B22;
+  background-color: white;
+  color: #228B22;
+  border-radius: 5px;
 }

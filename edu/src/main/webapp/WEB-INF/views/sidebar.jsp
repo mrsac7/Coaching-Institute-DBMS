@@ -4,24 +4,20 @@
 
 <div id="sidebar_container">
   <div class="sidebar_item">
-    <h3>Useful Links</h3>
+    <h3>Quick Links</h3>
     <ul>
-      <li><a href="/students">All Students</a></li>
-      <li><a href="/employees">All Employees</a></li>
-      <li><a href="/credentials/change">Change Password</a></li>
+      <li>&#8212;&nbsp;&nbsp;<a href="/students">All Teachers</a></li>
+      <li>&#8212;&nbsp;&nbsp;<a href="#">Study Materials</a></li>
+      <li>&#8212;&nbsp;&nbsp;<a href="/credentials/change">Change Password</a></li>
+      <li>&#8212;&nbsp;&nbsp;<a href="#">Our Achievements</a></li>
+      <li>&#8212;&nbsp;&nbsp;<a href="#">FAQs</a></li>
     </ul>
   </div>
   <div class="sidebar_item">
-    <h3>Student Search</h3>
-    <form method="post" action="/students/search" id="search_form">
-      <p>
-        <input class="search" type="text" name="serialNumber" onfocus="this.value=''" value="Enter Serial Number....." />
-        <input name="search" type="image" style="border: 0; margin: 0 0 -9px 5px;" src="/style/search.png" alt="Search"
-          title="Search" />
-      </p>
-    </form>
+    <h3>Notifications</h3>
+    <p>Welcome</p>
   </div>
-  <div class="sidebar_item">
+  <!-- <div class="sidebar_item">
     <h3>Employee Search</h3>
     <form method="post" action="/employees/search" id="search_form">
       <p>
@@ -30,5 +26,5 @@
           title="Search" />
       </p>
     </form>
-  </div>
+  </div> -->
 </div>

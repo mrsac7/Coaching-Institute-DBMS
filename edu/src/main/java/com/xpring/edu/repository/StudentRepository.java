@@ -1,5 +1,7 @@
 package com.xpring.edu.repository;
 
+import java.util.List;
+
 import com.xpring.edu.model.Student;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +34,10 @@ public class StudentRepository {
     public void updateStudent(Student student) {
         String sql = "UPDATE Student SET first_name = ?, middle_name = ?, last_name = ?, sex = ?, date_of_birth = ?, contact_no = ?, house_no = ?, street = ?, city = ?,pin = ? WHERE studentID ="+student.getStudentID();
         jdbcTemplate.update(sql, new Object[] {student.getFirstName(), student.getMiddleName(), student.getLastName(), student.getSex(), student.getDateOfBirth(), student.getContactNo(), student.getHouseNo(), student.getStreet(), student.getCity(), student.getPin()});
+    }
+
+    public List<Student> getAllByBatch(String batchID) {
+        String sql = "SELECT DISTINCT s.studentid, s.first_name, s.middle_name, s.last_name FROM Student s, Enrollment e WHERE s.studentID = e.studentID and e.batchID = "+ "'"+ batchID +"'";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Student.class));
     }
 }

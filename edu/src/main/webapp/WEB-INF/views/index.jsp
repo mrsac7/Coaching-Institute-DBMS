@@ -50,8 +50,20 @@
                 <li><a href="#">Class XII</a></li>
               </ul>
             </li>
+            <li><a href="/attendance/${user.username}">Attendance</a></li>
             <li><a href="/tests">Result</a></li>
             <li><a href="/enrollment">Enrollment</a></li>
+          </sec:authorize>
+          <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
+            <li>
+              <a>Attendance <i class="fa fa-caret-down"></i></a>
+              <ul id="sub-menu">
+                <li><a href="/attendance/${user.username}">View Attendance</a></li>
+                <li><a href="/take_attendance">Take Attendance</a></li>
+              </ul>
+            </li>
+            <li><a href="/test">Test</a></li>
+            <li><a href="#">Payroll</a></li>
           </sec:authorize>
           <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
             <li><a href="/profile/${user.username}">Profile</a></li>
