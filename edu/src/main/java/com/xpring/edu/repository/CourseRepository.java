@@ -24,4 +24,9 @@ public class CourseRepository {
             return null;
         }
     }
+
+    public Course getCourse(String courseID) {
+        String sql = "SELECT * from course WHERE courseid = "+"'"+courseID+"'";
+        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Course.class));
+    }
 }

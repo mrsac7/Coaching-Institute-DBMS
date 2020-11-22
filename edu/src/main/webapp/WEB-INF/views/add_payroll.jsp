@@ -7,7 +7,7 @@
 <html>
 
 <head>
-    <title>Test - StarCoaching</title>
+    <title>Payroll - StarCoaching</title>
     <meta name="description" content="website description" />
     <meta name="keywords" content="website keywords, website keywords" />
     <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
@@ -20,7 +20,7 @@
             <jsp:include page="logo.jsp" />
             <div id="menubar">
                 <ul id="menu">
-                    <li class="selected"><a href="/">Home</a></li>
+                    <li><a href="/">Home</a></li>
                     <sec:authentication var="user" property="principal" />
                     <sec:authorize access="hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/users">Users</a></li>
@@ -66,7 +66,7 @@
                             </ul>
                         </li>
                         <li><a href="/test">Test</a></li>
-                        <li><a href="#">Payroll</a></li>
+                        <li class="selected"><a href="/payroll">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -85,53 +85,35 @@
         <div id="site_content">
             <jsp:include page="sidebar.jsp" />
             <div class="content">
-                <h1>Edit Test</h1>
+                <h1>Add Payroll</h1>
                 <p>${message}</p>
-                <form action="/test/${test.testID}/edit" method="POST">
+                <form action="/payroll/add" method="POST">
                     <ul class="ver-table">
                         <li>
-                            <label>Test ID:</label>
-                            <span><input class="read" type="text" name="testID" value="${test.testID}" readonly /></span>
+                            <label>Reference No:</label>
+                            <span><input type="text" name="refNo" placeholder="Reference No" /></span>
                         </li>
                         <li>
-                            <label>Name:</label>
-                            <span><input type="text" name="testName" placeholder="Name" value="${test.testName}" /></span>
-                        </li>
-                        <li>
-                            <label>Course:</label>
+                            <label>Teacher:</label>
                             <span>
-                                <select id="id" name="courseID" aria-placeholder="Course ID">
-                                    <c:forEach items="${allCourses}" var="course">
-                                        <c:choose>
-                                            <c:when test="${test.courseID == course.courseID}">
-                                                <option value="${course.courseID}" selected>${course.courseID}</option>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option value="${course.courseID}">${course.courseID}</option>
-                                            </c:otherwise>
-                                        </c:choose>
+                                <select id="id" name="teacherID" aria-placeholder="Teacher ID">
+                                    <c:forEach items="${allTeacher}" var="teacher">
+                                        <option value="${teacher.teacherID}">${teacher.teacherID} - ${teacher.firstName} ${teacher.middleName} ${teacher.lastName}</option>
                                     </c:forEach>
                                 </select>
                             </span>
                         </li>
                         <li>
-                            <label>Date:</label>
-                            <fmt:formatDate pattern="yyyy-MM-dd" value="${test.date}" var="date" />
-                            <span><input type="date" name="date" placeholder="Date" value="${date}"></span>
+                            <label>Month:</label>
+                            <span><input type="month" name="sdate" placeholder="Service Date"></span>
                         </li>
                         <li>
-                            <label>Timing:</label>
-                            <fmt:formatDate pattern="HH:mm" value="${test.startTime}" var="stime" />
-                            <fmt:formatDate pattern="HH:mm" value="${test.endTime}" var="etime" />
-                            <span>
-                                <input type="time" name="stime" placeholder="Start Time" value="${stime}">
-                                &nbsp; To &nbsp;
-                                <input type="time" name="etime" placeholder="End Time" value="${etime}">
-                            </span>
+                            <label>Date Credited:</label>
+                            <span><input type="date" name="creditDate" placeholder="Credit Date"></span>
                         </li>
                         <li>
-                            <label>Total Marks:</label>
-                            <span><input type="number" name="marks" placeholder="Marks" value="${test.marks}"></span>
+                            <label>Amount:</label>
+                            <span><input type="number" name="amount" placeholder="Amount"></span>
                         </li>
                     </ul>
                     <div class="container">

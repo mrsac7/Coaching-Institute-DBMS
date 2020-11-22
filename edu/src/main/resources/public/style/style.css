@@ -486,7 +486,7 @@ ul#small-button3 >li {
 .form-button {
   display: inline-block;
 }
-.form-button input {
+.form-button input, .inp input {
   font-size: 12px;
   padding: 2px 8px;
   box-shadow: none;

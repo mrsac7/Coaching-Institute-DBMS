@@ -1,5 +1,7 @@
 package com.xpring.edu.services;
 
+import java.util.List;
+
 import com.xpring.edu.model.Teacher;
 import com.xpring.edu.repository.TeacherRepository;
 
@@ -23,5 +25,9 @@ public class TeacherService {
 
     public void updateTeacher(Teacher teacher) {
         teacherRepository.updateTeacher(teacher);
+    }
+
+    public List<Teacher> getAll() {
+        return teacherRepository.getAll();
     }
 }

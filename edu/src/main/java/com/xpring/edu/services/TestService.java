@@ -34,4 +34,8 @@ public class TestService {
     public void deleteTest(int testID) {
         testRepository.deleteTest(testID);
     }
+
+    public List<Test> getTestOfStudent(int studentID) {
+        return testRepository.getTestOfStudent(studentID);
+    }
 }

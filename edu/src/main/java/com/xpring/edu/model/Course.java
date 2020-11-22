@@ -11,7 +11,7 @@ public class Course {
     private String courseID;
     private String courseName;
     private String description;
-    private String standard;
+    private String batchID;
 
     public String getCourseID() {
         return courseID;
@@ -37,23 +37,23 @@ public class Course {
         this.description = description;
     }
 
-    public String getStandard() {
-        return standard;
+    public String getBatchID() {
+        return batchID;
     }
 
-    public void setStandard(String standard) {
-        this.standard = standard;
+    public void setBatchID(String batchID) {
+        this.batchID = batchID;
     }
 
     public Course() {
 
     }
 
-    public Course(String courseID, String courseName, String description, String standard) {
+    public Course(String courseID, String courseName, String description, String batchID) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.description = description;
-        this.standard = standard;
+        this.batchID = batchID;
     }
 
     

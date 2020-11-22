@@ -68,46 +68,40 @@
                     </sec:authorize>
                 </ul>
             </div>
-        <div id="content_header"></div>
-        <div id="site_content">
-            <jsp:include page="sidebar.jsp" />
-            <div class="content">
-                <h1>Enrollment</h1>
-                <p>${message}</p>
-                <form action="/enrollment/new">
-                    <ul class="ver-table">
-                        <li>
-                            <label>StudentID:</label>
-                            <span><input class="read" type="text" name="studentID" value="${student.studentID}" readonly /></span>
-                        </li>
-                        <li>
-                            <label>Name:</label>
-                            <span><input class="read" type="text" name="name" value="${student.firstName} ${student.middleName} ${student.lastName}" readonly /></span>
-                        </li>
-                        <li>
-                            <label>Choose Batch:</label>
-                            <span>
-                                <select id="id" name="batchID" aria-placeholder="Choose Batch" var="batchID">
-                                    <option value="CLASS_IX" selected>Class IX</option>
-                                    <option value="CLASS_X">Class X</option>
-                                    <option value="CLASS_XI">Class XI</option>
-                                    <option value="CLASS_XII">Class XII</option>
-                                </select>
-                            </span>
-                        </li>
-                        <!-- <li>
-                            <label>Amount:</label>
-                            <span><input class="read" type="text" name="amount" value="" readonly /></span>
-                        </li> -->
-                    </ul>
-                    <div class="container">
-                        </span><input class="submit button" type="submit" value="Proceed" />
-                    </div>
-                </form>
+            <div id="content_header"></div>
+            <div id="site_content">
+                <jsp:include page="sidebar.jsp" />
+                <div class="content">
+                    <h1>Enrollment</h1>
+                    <p>${message}</p>
+                    <form action="/enrollment/new" method="POST">
+                        <ul class="ver-table">
+                            <li>
+                                <label>StudentID:</label>
+                                <span><input class="read" type="text" name="studentID" value="${enrollment.studentID}" readonly /></span>
+                            </li>
+                            <li>
+                                <label>Name:</label>
+                                <span><input class="read" type="text" name="name"
+                                        value="${name}" readonly /></span>
+                            </li>
+                            <li>
+                                <label>Batch:</label>
+                                <span><input class="read" type="text" name="batchID" value="${enrollment.batchID}" readonly /></span>
+                            </li>
+                            <li>
+                                <label>Amount:</label>
+                                <span>&#x20B9;<input class="read" type="text" name="amount" value="${fees.amount}" readonly /></span>
+                
+                        </ul>
+                        <div class="container">
+                            </span><input class="submit button" type="submit" value="Pay" />
+                        </div>
+                    </form>
+                </div>
             </div>
+            <jsp:include page="footer.jsp" />
         </div>
-        <jsp:include page="footer.jsp" />
-    </div>
 </body>
 
 </html>

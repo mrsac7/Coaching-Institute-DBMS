@@ -6,10 +6,12 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
 import com.xpring.edu.util.CustomAttendance;
+import com.xpring.edu.util.CustomResult;
 import com.xpring.edu.util.CustomStudent;
 import com.xpring.edu.util.DaysFromMonth;
 import com.xpring.edu.model.Enrollment;
@@ -21,6 +23,8 @@ import com.xpring.edu.model.TeacherAttendance;
 import com.xpring.edu.model.Test;
 import com.xpring.edu.model.Transaction;
 import com.xpring.edu.model.Course;
+import com.xpring.edu.model.Payroll;
+import com.xpring.edu.model.Result;
 
 // import java.security.Principal;
 
@@ -30,8 +34,11 @@ import com.xpring.edu.model.Course;
 import com.xpring.edu.model.User;
 import com.xpring.edu.services.CourseService;
 import com.xpring.edu.services.EnrollmentService;
+import com.xpring.edu.services.FeesService;
 // import com.xpring.edu.services.EnrollmentService;
 import com.xpring.edu.services.GuardianService;
+import com.xpring.edu.services.PayrollService;
+import com.xpring.edu.services.ResultService;
 import com.xpring.edu.services.StudentAttendanceService;
 import com.xpring.edu.services.StudentService;
 import com.xpring.edu.services.TeacherAttendanceService;
@@ -85,6 +92,15 @@ public class AppController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private PayrollService payrollService;
+
+    @Autowired
+    private ResultService resultService;
+
+    @Autowired
+    private FeesService feesService;
+
     @GetMapping("/")
     public String main(Model model){
         return "redirect:/home";
@@ -132,19 +148,10 @@ public class AppController {
         }
         else if (user.getRole().equals("ROLE_STUDENT")) {
             Student student = studentService.getStudentByUsername(username);
-            Guardian guardian = guardianService.getGuardian(student.getStudentID());
-            model.addAttribute("userX", user);
             model.addAttribute("student", student);
-            model.addAttribute("guardian", guardian);
         }
         return "enrollment";
-    }
-    
-
-    @GetMapping("/payroll")
-    public String payroll(Model model) {
-        return "payroll";
-    }
+    } 
 
     @GetMapping("/profile")
     public String profile(Model model, User user, Principal principal) {
@@ -216,13 +223,23 @@ public class AppController {
         return "redirect:/profile/"+username;
     }
 
-    @PostMapping("/enrollment")
-    public void processEnrollment(Model model, Student student, Enrollment enrollment, Transaction transaction) {
+    @GetMapping("/enrollment/new")
+    public String newEnrollment(Model model, @RequestParam("name") String name, Enrollment enrollment) {
+        model.addAttribute("name", name);
+        model.addAttribute("enrollment", enrollment);
+        model.addAttribute("fees", feesService.getFees(enrollment.getBatchID()));
+        return "process_enrollment";
+    }
+
+    @PostMapping("/enrollment/new")
+    public String processEnrollment(Model model, Enrollment enrollment, Transaction transaction, Principal principal) {
         int transactionID = transactionService.saveTransaction(transaction);
-        // transaction = transactionService.getTransaction(transactionID);
         enrollment.setTransactionID(transactionID);
         enrollmentService.saveEnrollment(enrollment);
         model.addAttribute("message", "Enrollment Successfull!");
+        // Student student = studentService.getStudentByUsername(principal.getName());
+        // model.addAttribute("student", student);
+        return enrollment(model, principal);
     }
 
     @GetMapping("/take_attendance")
@@ -366,6 +383,22 @@ public class AppController {
         return "add_test";
     }
 
+    @GetMapping("/payroll")
+    public String payroll(Model model) {
+        List<Payroll> payroll = payrollService.getAll();
+        List<Teacher> teacher = teacherService.getAll();
+        model.addAttribute("allTeacher", teacher);
+        model.addAttribute("allPayroll", payroll);
+        return "payroll";
+    }
+
+    @GetMapping("/payroll/add")
+    public String addPayroll(Model model) {
+        List<Teacher> list = teacherService.getAll();
+        model.addAttribute("allTeacher", list);
+        return "add_payroll";
+    }
+    
     @PostMapping("/test/add")
     public String newTest(Model model, @RequestParam("stime") String stime, @RequestParam("etime") String etime, Test test) {
         SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
@@ -375,10 +408,14 @@ public class AppController {
         return "redirect:/test";
     }
 
-    @GetMapping("/edit_test")
-    public String edT(Principal principal){
-        return "redirect:/edit_test/"+principal.getName();
+    @PostMapping("/payroll/add")
+    public String newPayroll(Model model, @RequestParam("sdate") String sdate, Payroll payroll) {
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+        payroll.setServiceDate(ft.parse(sdate+"-01", new ParsePosition(0)));
+        payrollService.savePayroll(payroll);
+        return "redirect:/payroll";
     }
+
     @GetMapping("/test/{testID}/edit")
     public String editTest(@PathVariable int testID, Model model) {
         Test test = testService.getTest(testID);
@@ -386,6 +423,15 @@ public class AppController {
         List<Course> list = courseService.getAll();
         model.addAttribute("allCourses", list);
         return "edit_test";
+    }
+
+    @GetMapping("/payroll/{refNo}/edit")
+    public String editPayroll(@PathVariable String refNo, Model model) {
+        Payroll payroll = payrollService.getPayroll(refNo);
+        model.addAttribute("payroll", payroll);
+        List<Teacher> list = teacherService.getAll();
+        model.addAttribute("allTeacher", list);
+        return "edit_payroll";
     }
 
     @PostMapping("test/{testID}/edit")
@@ -397,9 +443,150 @@ public class AppController {
         return "redirect:/test";
     }
 
+    @PostMapping("payroll/{refNo}/edit")
+    public String updatePayroll(Model model, @RequestParam("sdate") String sdate, Payroll payroll) {
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+        payroll.setServiceDate(ft.parse(sdate + "-01", new ParsePosition(0)));
+        payrollService.updatePayroll(payroll);
+        return "redirect:/payroll";
+    }
+
     @PostMapping("test/{testID}/delete")
     public String deleteTest(Model model, @PathVariable int testID) {
         testService.deleteTest(testID);
         return "redirect:/test";
+    }
+
+    @PostMapping("payroll/{refNo}/delete")
+    public String deletePayroll(Model model, @PathVariable String refNo) {
+        payrollService.deletePayroll(refNo);
+        return "redirect:/payroll";
+    }
+
+    @GetMapping("test/{testID}/result")
+    public String result(Model model, @PathVariable int testID) {
+        Test test = testService.getTest(testID);
+        Course course = courseService.getCourse(test.getCourseID());
+        List<Student> list = studentService.getAllByBatch(course.getBatchID());
+        List<Result> result = resultService.getResult(testID);
+        model.addAttribute("test", test);
+        List<CustomResult> resultList = new ArrayList<CustomResult>();
+        for (Student s: list) {
+            int marks = -1;
+            for (Result r: result) {
+                if (r.getStudentID() == s.getStudentID()) {
+                    marks = r.getMarks();
+                    break;
+                }
+            }            
+            CustomResult cr = new CustomResult();
+            cr.setTestID(testID);
+            cr.setStudentID(s.getStudentID());
+            cr.setFirstName(s.getFirstName());
+            cr.setMiddleName(s.getMiddleName());
+            cr.setLastName(s.getLastName());
+            cr.setMarks(marks);
+            resultList.add(cr);
+            Double percent  = 0.0;
+            if (marks >= 0) {
+                percent = marks*100.0/test.getMarks();
+            }
+            cr.setPercent(percent);
+        }
+        Collections.sort(resultList, (m1, m2) -> m2.getMarks() - m1.getMarks());
+        int rank = 0, marks = test.getMarks()+1;
+        for (CustomResult cr: resultList) {
+            if (cr.getMarks() == marks) {
+                cr.setRank(rank);
+            }
+            else {
+                marks = cr.getMarks();
+                rank++;
+                cr.setRank(rank);
+            }
+            resultService.updateRank(cr);
+        }
+        model.addAttribute("resultList", resultList);
+        return "result";
+    }
+
+    @GetMapping("test/{testID}/result/edit/{studentID}")
+    public String editResult(Model model, @PathVariable int testID, @PathVariable int studentID) {
+        Test test = testService.getTest(testID);
+        Course course = courseService.getCourse(test.getCourseID());
+        List<Student> list = studentService.getAllByBatch(course.getBatchID());
+        List<Result> result = resultService.getResult(testID);
+        model.addAttribute("test", test);
+        List<CustomResult> resultList = new ArrayList<CustomResult>();
+        for (Student s : list) {
+            int marks = -1;
+            for (Result r : result) {
+                if (r.getStudentID() == s.getStudentID()) {
+                    marks = r.getMarks();
+                    break;
+                }
+            }
+            CustomResult cr = new CustomResult();
+            cr.setTestID(testID);
+            cr.setStudentID(s.getStudentID());
+            cr.setFirstName(s.getFirstName());
+            cr.setMiddleName(s.getMiddleName());
+            cr.setLastName(s.getLastName());
+            cr.setMarks(marks);
+            resultList.add(cr);
+            Double percent = 0.0;
+            if (marks >= 0) {
+                percent = marks * 100.0 / test.getMarks();
+            }
+            cr.setPercent(percent);
+        }
+        Collections.sort(resultList, (m1, m2) -> m2.getMarks() - m1.getMarks());
+        int rank = 0, marks = test.getMarks() + 1;
+        for (CustomResult cr : resultList) {
+            if (cr.getMarks() == marks) {
+                cr.setRank(rank);
+            } else {
+                marks = cr.getMarks();
+                rank++;
+                cr.setRank(rank);
+            }
+            resultService.updateRank(cr);
+        }
+        model.addAttribute("resultList", resultList);
+        model.addAttribute("toEdit", studentID);
+        return "edit_result";
+    }
+
+    @PostMapping("test/{testID}/result/edit/{studentID}")
+    public String processEditResult(Model model, @PathVariable int testID, Result result) {
+        resultService.updateResult(result);
+        return "redirect:/test/"+testID+"/result";
+    }
+
+    @GetMapping("result/{username}")
+    public String studentResult(Model model, @PathVariable String username) {
+        Student student = studentService.getStudentByUsername(username);
+        List<Test> list = testService.getTestOfStudent(student.getStudentID());
+        List<CustomResult> resultList = new ArrayList<CustomResult>();
+        for (Test test: list) {
+            Result result = resultService.getResultOfStudent(test.getTestID(), student.getStudentID());
+            CustomResult cr = new CustomResult();
+            cr.setTestID(test.getTestID());
+            cr.setCourseID(test.getCourseID());
+            cr.setTotalMarks(test.getMarks());
+            cr.setTestName(test.getTestName());
+            if (result == null) {
+                cr.setMarks(-1);
+            }
+            else {
+                cr.setMarks(result.getMarks());
+                cr.setPercent(result.getMarks() * 100.0 / test.getMarks());
+                cr.setRank(result.getTestRank());
+            }
+            resultList.add(cr);
+        }
+        model.addAttribute("resultList", resultList);
+        model.addAttribute("student", student);
+        return "student_result";
     }
 }

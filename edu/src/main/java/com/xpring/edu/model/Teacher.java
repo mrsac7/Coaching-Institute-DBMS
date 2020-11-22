@@ -66,6 +66,10 @@ public class Teacher {
         return lastName;
     }
 
+    public String getName() {
+        return firstName + " " + middleName + " " + lastName;
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -101,6 +105,8 @@ public class Teacher {
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
+
+
 
     public int getAge() {
         try {

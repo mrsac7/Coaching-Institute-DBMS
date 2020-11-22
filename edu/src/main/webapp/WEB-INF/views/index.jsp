@@ -34,7 +34,7 @@
                     <li><a href="#">Class XII</a></li>
                   </ul>
                 </li>
-                <li><a href="/tests">Tests</a></li>
+                <li><a href="/test">Tests</a></li>
                 <li><a href="/enrollment">Enrollment</a></li>
               </ul>
             </li>
@@ -51,7 +51,7 @@
               </ul>
             </li>
             <li><a href="/attendance/${user.username}">Attendance</a></li>
-            <li><a href="/tests">Result</a></li>
+            <li><a href="/result/${user.username}">Result</a></li>
             <li><a href="/enrollment">Enrollment</a></li>
           </sec:authorize>
           <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">

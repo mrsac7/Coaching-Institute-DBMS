@@ -18,4 +18,7 @@ public class CourseService {
     public List<Course> getAll() {
         return courseRepository.getAll();
     }
+    public Course getCourse(String courseID) {
+        return courseRepository.getCourse(courseID);
+    }
 }

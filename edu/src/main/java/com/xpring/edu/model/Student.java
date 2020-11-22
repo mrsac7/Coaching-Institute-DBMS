@@ -69,6 +69,10 @@ public class Student {
         this.lastName = lastName;
     }
 
+    public String getName() {
+        return firstName+" "+middleName+" "+lastName;
+    }
+
     public String getSex() {
         return sex;
     }

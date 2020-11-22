@@ -1,5 +1,7 @@
 package com.xpring.edu.repository;
 
+import java.util.List;
+
 import com.xpring.edu.model.Teacher;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +38,8 @@ public class TeacherRepository {
                         teacher.getCity(), teacher.getPin(), teacher.getQualification(), teacher.getExperience() });
     }
 
+    public List<Teacher> getAll() {
+        String sql = "SELECT teacherid, first_name, middle_name, last_name FROM teacher";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Teacher.class));
+    }
 }

@@ -8,7 +8,7 @@
 <html>
 
 <head>
-    <title>Home - StarCoaching</title>
+    <title>Test - StarCoaching</title>
     <link rel="stylesheet" type="text/css" href="style/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -102,8 +102,7 @@
                             <th>Name</th>
                             <th>Course</th>
                             <th>Date</th>
-                            <th>Start</th>
-                            <th>End</th>
+                            <th>Timing</th>
                             <th>Marks</th>
                             <th>Action</th>
                         </tr>
@@ -115,12 +114,13 @@
                                 <td>${test.testName}</td>
                                 <td>${test.courseID}</td>
                                 <td><fmt:formatDate pattern="dd-MM-yyyy" value="${test.date}" /></td>
-                                <td>${test.startTime}</td>
-                                <td>${test.endTime}</td>
+                                <fmt:formatDate pattern="HH:mm a" value="${test.startTime}" var="stime" />
+                                <fmt:formatDate pattern="HH:mm a" value="${test.endTime}" var="etime" />
+                                <td>${stime} - ${etime}</td>
                                 <td>${test.marks}</td>
                                 <td>
                                     <span>
-                                        <form action="" class="form-button">
+                                        <form action="/test/${test.testID}/result" class="form-button">
                                             <input type="submit" value="Result">
                                         </form>
                                         <form action="/test/${test.testID}/edit" class="form-button">

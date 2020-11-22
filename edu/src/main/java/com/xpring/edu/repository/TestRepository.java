@@ -49,4 +49,10 @@ public class TestRepository {
         String sql = "DELETE FROM test WHERE testID = "+testID;
         jdbcTemplate.update(sql);
     }
+
+    public List<Test> getTestOfStudent(int studentID) {
+        String sql = "SELECT * FROM test t WHERE EXISTS(select * FROM enrollment e, course c WHERE e.batchid = c.batchid AND t.courseid = c.courseid AND e.studentid = "
+                + studentID+")";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Test.class));
+    }
 }
