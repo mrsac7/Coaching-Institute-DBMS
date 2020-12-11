@@ -20,4 +20,28 @@ public class TeacherAttendanceRepository {
                 + startDate + "'" + " AND date <= " + "'" + endDate + "'";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(TeacherAttendance.class));
     }
+
+    public List<TeacherAttendance> getAttendance(String date) {
+        String sql = "SELECT * FROM teacher_attendance WHERE status = 'present' AND date =" + "'" + date + "'";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(TeacherAttendance.class));
+    }
+
+    public void saveAttendance(TeacherAttendance attendance) {
+        try {
+            String sql = "INSERT INTO teacher_attendance(teacherid, date, status) VALUES (?, ?, ?)";
+            jdbcTemplate.update(sql, new Object[] { attendance.getTeacherID(),
+                    attendance.getDate(), attendance.getStatus() });
+        }
+
+        catch (Exception e) {
+
+        }
+    }
+
+    public void removeAttendance(TeacherAttendance attendance) {
+        String sql = "DELETE FROM teacher_attendance WHERE teacherID = ? AND date = ?";
+        jdbcTemplate.update(sql,
+                new Object[] { attendance.getTeacherID(), attendance.getDate()});
+    }
+
 }

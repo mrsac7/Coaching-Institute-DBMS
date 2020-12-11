@@ -31,39 +31,48 @@
                                 <li>
                                     <a href="/courses">Courses <i class="fa fa-caret-right"></i></a>
                                     <ul id="subsub-menu">
-                                        <li><a href="#">Class IX</a></li>
-                                        <li><a href="#">Class X</a></li>
-                                        <li><a href="#">Class XI</a></li>
-                                        <li><a href="#">Class XII</a></li>
+                                        <li><a href="/course/ix">Class IX</a></li>
+                                        <li><a href="/course/x">Class X</a></li>
+                                        <li><a href="/course/xi">Class XI</a></li>
+                                        <li><a href="/course/xii">Class XII</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="/tests">Tests</a></li>
-                                <li><a href="/enrollment">Enrollment</a></li>
+                                <li><a href="/test">Tests</a></li>
+                                <li><a href="/view_enrollment">Enrollment</a></li>
                             </ul>
                         </li>
-                        <li><a href="/attendance">Attendance</a></li>
+                        <li class="selected">
+                            <a>Attendance <i class="fa fa-caret-down"></i></a>
+                            <ul id="sub-menu">
+                                <li><a href="/teacher_attendance">Teacher Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
+                            </ul>
+                        </li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
                         <li>
                             <a class="dropdown" href="#">Courses <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
-                                <li><a href="#">Class IX</a></li>
-                                <li><a href="#">Class X</a></li>
-                                <li><a href="#">Class XI</a></li>
-                                <li><a href="#">Class XII</a></li>
+                                <li><a href="/course/ix">Class IX</a></li>
+                                <li><a href="/course/x">Class X</a></li>
+                                <li><a href="/course/xi">Class XI</a></li>
+                                <li><a href="/course/xii">Class XII</a></li>
                             </ul>
                         </li>
-                        <li><a href="/tests">Result</a></li>
-                        <li><a href="/enrollment">Enrollment</a></li>
+                        <li class="selected"><a href="/attendance/${user.username}">Attendance</a></li>
+                        <li><a href="/result/${user.username}">Result</a></li>
+                        <li><a href="/enrollment/${user.username}">Enrollment</a></li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
-                        <li>
+                        <li class="selected">
                             <a>Attendance <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
-                                <li><a href="#">View Attendance</a></li>
-                                <li class="selected"><a href="/take_attenance">Take Attendance</a></li>
+                                <li><a href="/attendance/${user.username}">View Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
                             </ul>
                         </li>
+                        <li><a href="/test">Test</a></li>
+                        <li><a href="/payroll/${user.username}">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -77,63 +86,64 @@
                     </sec:authorize>
                 </ul>
             </div>
-            <div id="content_header"></div>
-            <div id="site_content">
-                <jsp:include page="sidebar.jsp" />
-                <div class="content">
-                    <h1>Your Attendance</h1>
-                    <p>${message}</p>
-                    <div>
-                        <form action="/attendance/${user.username}" method="POST">
-                            <div>
-                                <ul id="small-button2">
-                                    <li>
-                                        <span>
-                                            <label for="month"> Choose Month:</label>
-                                            <input id="month" type="month" name="date" placeholder="Choose Date"
-                                                value="${date}">
-                                            </span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <ul id="small-button">
-                                    <li>
-                                        <input style="padding: 4px 15px" type="submit" value="Proceed" />
-                                    </li>
-                                </ul>
-                            </div>
-                        </form>
-                    </div>
-                    <div style="margin-top: 50px">
-                        <table class="hor-table">
-                            <thead>
+        </div>
+        <div id="content_header"></div>
+        <div id="site_content">
+            <jsp:include page="sidebar.jsp" />
+            <div class="content">
+                <h1>Your Attendance</h1>
+                <p>${message}</p>
+                <div>
+                    <form action="/attendance/${user.username}" method="POST">
+                        <div>
+                            <ul id="small-button2">
+                                <li>
+                                    <span>
+                                        <label for="month"> Choose Month:</label>
+                                        <input id="month" type="month" name="date" placeholder="Choose Date"
+                                            value="${date}">
+                                        </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul id="small-button">
+                                <li>
+                                    <input style="padding: 4px 15px" type="submit" value="Proceed" />
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+                <div style="margin-top: 50px">
+                    <table class="hor-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${attendanceList}" var="list">
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Status</th>
+                                    <td><fmt:formatDate pattern="dd-MMM-yyyy" value="${list.date}" /></span></td>
+                                    <c:choose>
+                                        <c:when test = "${list.status == 'Present'}">
+                                            <td style="color:#228B22;">${list.status}</td>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td style="color:red">${list.status}</td>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach items="${attendanceList}" var="list">
-                                    <tr>
-                                        <td><fmt:formatDate pattern="dd-MMM-yyyy" value="${list.date}" /></span></td>
-                                        <c:choose>
-                                            <c:when test = "${list.status == 'Present'}">
-                                                <td style="color:#228B22;">${list.status}</td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td style="color:red">${list.status}</td>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <jsp:include page="footer.jsp" />
         </div>
+        <jsp:include page="footer.jsp" />
+    </div>
 </body>
 
 </html>

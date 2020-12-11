@@ -1,17 +1,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE HTML>
 <html>
 
 <head>
-    <title>Payroll - StarCoaching</title>
+    <title>FAQs - StarCoaching</title>
     <meta name="description" content="website description" />
     <meta name="keywords" content="website keywords, website keywords" />
     <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
     <link rel="stylesheet" type="text/css" href="/style/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -24,8 +24,8 @@
                     <sec:authentication var="user" property="principal" />
                     <sec:authorize access="hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/users">Users</a></li>
-                        <li class="selected"><a href="/payroll">Payroll</a></li>
-                        <li>
+                        <li><a href="/payroll">Payroll</a></li>
+                        <li class="selected">
                             <a class="dropdown" href="#">Academics <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
                                 <li>
@@ -50,7 +50,7 @@
                         </li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
-                        <li>
+                        <li class="selected">
                             <a class="dropdown" href="#">Courses <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
                                 <li><a href="/course/ix">Class IX</a></li>
@@ -72,7 +72,7 @@
                             </ul>
                         </li>
                         <li><a href="/test">Test</a></li>
-                        <li class="selected"><a href="/payroll/${user.username}">Payroll</a></li>
+                        <li><a href="/payroll/${user.username}">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -89,43 +89,50 @@
         </div>
         <div id="content_header"></div>
         <div id="site_content">
-            <jsp:include page="sidebar.jsp" />
-            <div class="content">
-                <h1>Add Payroll</h1>
-                <p>${message}</p>
-                <form action="/payroll/add" method="POST">
-                    <ul class="ver-table">
-                        <li>
-                            <label>Reference No:</label>
-                            <span><input type="text" name="refNo" placeholder="Reference No" /></span>
-                        </li>
-                        <li>
-                            <label>Teacher:</label>
-                            <span>
-                                <select id="id" name="teacherID" aria-placeholder="Teacher ID">
-                                    <c:forEach items="${allTeacher}" var="teacher">
-                                        <option value="${teacher.teacherID}">${teacher.teacherID} - ${teacher.firstName} ${teacher.middleName} ${teacher.lastName}</option>
-                                    </c:forEach>
-                                </select>
-                            </span>
-                        </li>
-                        <li>
-                            <label>Month:</label>
-                            <span><input type="month" name="sdate" placeholder="Service Date"></span>
-                        </li>
-                        <li>
-                            <label>Date Credited:</label>
-                            <span><input type="date" name="creditDate" placeholder="Credit Date"></span>
-                        </li>
-                        <li>
-                            <label>Amount:</label>
-                            <span><input type="number" name="amount" placeholder="Amount"></span>
-                        </li>
+            <div id="banner"></div>
+            <div id="sidebar_container">
+                <div class="sidebar_item">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li>&#8212;&nbsp;&nbsp;<a href="/teacher">All Teachers</a></li>
+                        <sec:authorize access="isAuthenticated()">
+                            <li>&#8212;&nbsp;&nbsp;<a href="#">Study Materials</a></li>
+                            <li>&#8212;&nbsp;&nbsp;<a href="/change_password">Change Password</a></li>
+                        </sec:authorize>
+                        <li>&#8212;&nbsp;&nbsp;<a href="#">FAQs</a></li>
                     </ul>
-                    <div class="container">
-                        </span><input class="submit button" type="submit" value="Proceed" />
+                </div>
+                <div class="sidebar_item" style="padding-bottom: 50px;">
+                    <h3>Notifications</h3>
+                    <div>
+                        <ul id="small-button">
+                            <li>
+                                <a href="/notification/add">
+                                    <input type="submit" value="Add" />
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                </form>
+                    <div style="clear:both;">
+                        <c:forEach items="${list}" var="notification">
+                            <span style="display:block; margin-bottom: 5px;"><span
+                                    style="color:#1a73e8">${notification.emailID}</span> &#8212; <a
+                                    href="notification/${notification.notificationID}"
+                                    style="text-decoration: underline;">${notification.header}</a>
+                            </span>
+                        </c:forEach>
+                    </div>
+                </div>
+            </div>
+            <!-- <include src="sidebar.jsp"></include> -->
+            <div class="content">
+                <h1>Course - XI</h1>
+                <h4>CHEMISTRY</h4>
+                <p>Syllabus of Chemistry Course</p>
+                <h4>PHYSICS</h4>
+                <p>Syllabus of Physics Course</p>
+                <h4>MATHS</h4>
+                <p>Syllabus of Maths Course</p>
             </div>
         </div>
         <jsp:include page="footer.jsp" />

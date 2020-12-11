@@ -51,4 +51,9 @@ public class PayrollRepository {
         String sql = "DELETE FROM payroll WHERE ref_no = " + "'"+ refNo + "'";
         jdbcTemplate.update(sql);
     }
+
+    public List<Payroll> getAllPayroll(int teacherID) {
+        String sql = "SELECT * FROM payroll WHERE teacherid = "+teacherID;
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Payroll.class));
+    }
 }

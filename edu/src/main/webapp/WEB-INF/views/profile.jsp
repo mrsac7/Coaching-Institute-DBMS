@@ -51,79 +51,81 @@
         <div id="content_header"></div>
         <div id="site_content">
             <jsp:include page="sidebar.jsp" />
-            <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
+            <c:choose>
+                <c:when test="${userX.role == 'ROLE_STUDENT'}">
+                    <div class="content">
+                        <h1>Profile</h1>
+                        <p>${message}</p>
+                        <div>
+                            <h4 style="text-transform:uppercase;display:inline-block; vertical-align: bottom; padding-top: 6px">
+                                ${student.firstName} ${student.middleName}
+                                ${student.lastName}</h4>
+                    
+                            <ul id="small-button">
+                                <li>
+                                    <form action="/profile/${userX.username}/edit">
+                                        <input type="submit" value="Edit" />
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                        <ul class="ver-table">
+                            <li style="border-top: black solid 1px;">
+                                <label>Username:</label>
+                                <span>${userX.username}</span>
+                            </li>
+                            <li>
+                                <label>Student ID:</label>
+                                <span>${student.studentID}</span>
+                            </li>
+                            <li>
+                                <label>Email:</label>
+                                <span>${userX.email}</span>
+                            </li>
+                            <li>
+                                <label>Date Of Birth:</label>
+                                <span>
+                                    <fmt:formatDate pattern="dd-MMM-yyyy" value="${student.dateOfBirth}" /></span>
+                            </li>
+                            <li>
+                                <label>Sex:</label>
+                                <span>${student.sex}</span>
+                            </li>
+                            <li>
+                                <label>Age:</label>
+                                <span>${student.age}</span>
+                            </li>
+                            <li>
+                                <label>Contact:</label>
+                                <span>${student.contactNo}</span>
+                            </li>
+                            <li>
+                                <label>Address:</label>
+                                <span>${student.houseNo} ${student.street} ${student.city} ${student.pin}</span>
+                            </li>
+                            <li>
+                                <label>Guadian Name:</label>
+                                <span>${guardian.gfirstName} ${guardian.gmiddleName} ${guardian.glastName}</span>
+                            </li>
+                            <li>
+                                <label>Guardian Contact:</label>
+                                <span>${guardian.gcontactNo}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </c:when>
+                <c:when test="${userX.role == 'ROLE_TEACHER'}">
                 <div class="content">
                     <h1>Profile</h1>
                     <p>${message}</p>
                     <div>
                         <h4 style="text-transform:uppercase;display:inline-block; vertical-align: bottom; padding-top: 6px">
-                            ${student.firstName} ${student.middleName}
-                            ${student.lastName}</h4>
-                    
-                        <ul id="small-button">
-                            <li>
-                                <form action="/profile/${user.username}/edit" method="POST">
-                                    <input type="submit" value="Edit" />
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                    <ul class="ver-table">
-                        <li style="border-top: black solid 1px;">
-                            <label>Username:</label>
-                            <span>${userX.username}</span>
-                        </li>
-                        <li>
-                            <label>Student ID:</label>
-                            <span>${student.studentID}</span>
-                        </li>
-                        <li>
-                            <label>Email:</label>
-                            <span>${userX.email}</span>
-                        </li>
-                        <li>
-                            <label>Date Of Birth:</label>
-                            <span>
-                                <fmt:formatDate pattern="dd-MMM-yyyy" value="${student.dateOfBirth}" /></span>
-                        </li>
-                        <li>
-                            <label>Sex:</label>
-                            <span>${student.sex}</span>
-                        </li>
-                        <li>
-                            <label>Age:</label>
-                            <span>${student.age} Years</span>
-                        </li>
-                        <li>
-                            <label>Contact:</label>
-                            <span>${student.contactNo}</span>
-                        </li>
-                        <li>
-                            <label>Address:</label>
-                            <span>${student.houseNo} ${student.street} ${student.city} ${student.pin}</span>
-                        </li>
-                        <li>
-                            <label>Guadian Name:</label>
-                            <span>${guardian.gfirstName} ${guardian.gmiddleName} ${guardian.glastName}</span>
-                        </li>
-                        <li>
-                            <label>Guardian Contact:</label>
-                            <span>${guardian.gcontactNo}</span>
-                        </li>
-                    </ul>
-                </div>
-            </sec:authorize>
-            <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
-                <div class="content">
-                    <h1>Profile</h1>
-                    <p>${message}</p>
-                    <div>
-                        <h4 style="text-transform:uppercase;display:inline-block; vertical-align: bottom; padding-top: 6px">${teacher.firstName} ${teacher.middleName}
+                            ${teacher.firstName} ${teacher.middleName}
                             ${teacher.lastName}</h4>
-                            
+                
                         <ul id="small-button">
                             <li>
-                                <form action="/profile/${user.username}/edit" method="POST">
+                                <form action="/profile/${userX.username}/edit">
                                     <input type="submit" value="Edit" />
                                 </form>
                             </li>
@@ -153,7 +155,7 @@
                         </li>
                         <li>
                             <label>Age:</label>
-                            <span>${teacher.age} Years</span>
+                            <span>${teacher.age}</span>
                         </li>
                         <li>
                             <label>Contact:</label>
@@ -173,7 +175,8 @@
                         </li>
                     </ul>
                 </div>
-            </sec:authorize>
+                </c:when>
+            </c:choose>
         </div>
         <jsp:include page="footer.jsp" />
     </div>

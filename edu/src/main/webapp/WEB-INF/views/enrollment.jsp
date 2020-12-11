@@ -25,36 +25,54 @@
                     <sec:authorize access="hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/users">Users</a></li>
                         <li><a href="/payroll">Payroll</a></li>
-                        <li>
+                        <li class="selected">
                             <a class="dropdown" href="#">Academics <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
                                 <li>
                                     <a href="/courses">Courses <i class="fa fa-caret-right"></i></a>
                                     <ul id="subsub-menu">
-                                        <li><a href="#">Class IX</a></li>
-                                        <li><a href="#">Class X</a></li>
-                                        <li><a href="#">Class XI</a></li>
-                                        <li><a href="#">Class XII</a></li>
+                                        <li><a href="/course/ix">Class IX</a></li>
+                                        <li><a href="/course/x">Class X</a></li>
+                                        <li><a href="/course/xi">Class XI</a></li>
+                                        <li><a href="/course/xii">Class XII</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="/tests">Tests</a></li>
-                                <li class="selected"><a href="/enrollment">Enrollment</a></li>
+                                <li><a href="/test">Tests</a></li>
+                                <li><a href="/view_enrollment">Enrollment</a></li>
                             </ul>
                         </li>
-                        <li><a href="/attendance">Attendance</a></li>
+                        <li>
+                            <a>Attendance <i class="fa fa-caret-down"></i></a>
+                            <ul id="sub-menu">
+                                <li><a href="/teacher_attendance">Teacher Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
+                            </ul>
+                        </li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
                         <li>
                             <a class="dropdown" href="#">Courses <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
-                                <li><a href="#">Class IX</a></li>
-                                <li><a href="#">Class X</a></li>
-                                <li><a href="#">Class XI</a></li>
-                                <li><a href="#">Class XII</a></li>
+                                <li><a href="/course/ix">Class IX</a></li>
+                                <li><a href="/course/x">Class X</a></li>
+                                <li><a href="/course/xi">Class XI</a></li>
+                                <li><a href="/course/xii">Class XII</a></li>
                             </ul>
                         </li>
-                        <li><a href="/tests">Result</a></li>
-                        <li class="selected"><a href="/enrollment">Enrollment</a></li>
+                        <li><a href="/attendance/${user.username}">Attendance</a></li>
+                        <li><a href="/result/${user.username}">Result</a></li>
+                        <li class="selected"><a href="/enrollment/${user.username}">Enrollment</a></li>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
+                        <li>
+                            <a>Attendance <i class="fa fa-caret-down"></i></a>
+                            <ul id="sub-menu">
+                                <li><a href="/attendance/${user.username}">View Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/test">Test</a></li>
+                        <li><a href="/payroll/${user.username}">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -68,14 +86,16 @@
                     </sec:authorize>
                 </ul>
             </div>
+        </div>
         <div id="content_header"></div>
         <div id="site_content">
             <jsp:include page="sidebar.jsp" />
             <div class="content">
                 <h1>Enrollment</h1>
                 <p>${message}</p>
-                <form action="/enrollment/new">
-                    <ul class="ver-table">
+                <ul class="ver-table">
+                    <sec:authorize access="hasRole('ROLE_STUDENT')">
+                        <form action="/enrollment/new" method ="POST">
                         <li>
                             <label>StudentID:</label>
                             <span><input class="read" type="text" name="studentID" value="${student.studentID}" readonly /></span>
@@ -84,26 +104,30 @@
                             <label>Name:</label>
                             <span><input class="read" type="text" name="name" value="${student.firstName} ${student.middleName} ${student.lastName}" readonly /></span>
                         </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <form action="/enrollment" method="POST">
                         <li>
-                            <label>Choose Batch:</label>
-                            <span>
-                                <select id="id" name="batchID" aria-placeholder="Choose Batch" var="batchID">
-                                    <option value="CLASS_IX" selected>Class IX</option>
-                                    <option value="CLASS_X">Class X</option>
-                                    <option value="CLASS_XI">Class XI</option>
-                                    <option value="CLASS_XII">Class XII</option>
-                                </select>
-                            </span>
+                            <label>StudentID:</label>
+                            <span><input type="text" name="studentID" /></span>
                         </li>
-                        <!-- <li>
-                            <label>Amount:</label>
-                            <span><input class="read" type="text" name="amount" value="" readonly /></span>
-                        </li> -->
-                    </ul>
-                    <div class="container">
+                    </sec:authorize>
+                    <li>
+                        <label>Choose Batch:</label>
+                        <span>
+                            <select id="id" name="batchID" aria-placeholder="Choose Batch" var="batchID">
+                                <option value="CLASS_IX" selected>Class IX</option>
+                                <option value="CLASS_X">Class X</option>
+                                <option value="CLASS_XI">Class XI</option>
+                                <option value="CLASS_XII">Class XII</option>
+                            </select>
+                        </span>
+                    </li>
+                    <div class="container" style="margin-top: 20px">
                         </span><input class="submit button" type="submit" value="Proceed" />
                     </div>
                 </form>
+                </ul>
             </div>
         </div>
         <jsp:include page="footer.jsp" />

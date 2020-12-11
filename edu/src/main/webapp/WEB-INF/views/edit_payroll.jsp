@@ -31,42 +31,48 @@
                                 <li>
                                     <a href="/courses">Courses <i class="fa fa-caret-right"></i></a>
                                     <ul id="subsub-menu">
-                                        <li><a href="#">Class IX</a></li>
-                                        <li><a href="#">Class X</a></li>
-                                        <li><a href="#">Class XI</a></li>
-                                        <li><a href="#">Class XII</a></li>
+                                        <li><a href="/course/ix">Class IX</a></li>
+                                        <li><a href="/course/x">Class X</a></li>
+                                        <li><a href="/course/xi">Class XI</a></li>
+                                        <li><a href="/course/xii">Class XII</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="/tests">Tests</a></li>
-                                <li><a href="/enrollment">Enrollment</a></li>
+                                <li><a href="/test">Tests</a></li>
+                                <li><a href="/view_enrollment">Enrollment</a></li>
                             </ul>
                         </li>
-                        <li><a href="/attendance">Attendance</a></li>
+                        <li>
+                            <a>Attendance <i class="fa fa-caret-down"></i></a>
+                            <ul id="sub-menu">
+                                <li><a href="/teacher_attendance">Teacher Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
+                            </ul>
+                        </li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
                         <li>
                             <a class="dropdown" href="#">Courses <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
-                                <li><a href="#">Class IX</a></li>
-                                <li><a href="#">Class X</a></li>
-                                <li><a href="#">Class XI</a></li>
-                                <li><a href="#">Class XII</a></li>
+                                <li><a href="/course/ix">Class IX</a></li>
+                                <li><a href="/course/x">Class X</a></li>
+                                <li><a href="/course/xi">Class XI</a></li>
+                                <li><a href="/course/xii">Class XII</a></li>
                             </ul>
                         </li>
                         <li><a href="/attendance/${user.username}">Attendance</a></li>
-                        <li><a href="/tests">Result</a></li>
-                        <li><a href="/enrollment">Enrollment</a></li>
+                        <li><a href="/result/${user.username}">Result</a></li>
+                        <li><a href="/enrollment/${user.username}">Enrollment</a></li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
                         <li>
                             <a>Attendance <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
                                 <li><a href="/attendance/${user.username}">View Attendance</a></li>
-                                <li><a href="/take_attendance">Take Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
                             </ul>
                         </li>
                         <li><a href="/test">Test</a></li>
-                        <li><a href="#">Payroll</a></li>
+                        <li class="selected"><a href="/payroll/${user.username}">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -120,7 +126,7 @@
                         <li>
                             <label>Credit Date:</label>
                             <fmt:formatDate pattern="yyyy-MM-dd" value="${payroll.creditDate}" var="date" />
-                            <span><input type="date" name="date" placeholder="Date" value="${date}"></span>
+                            <span><input type="date" name="creditDate" placeholder="Date" value="${date}"></span>
                         </li>
                         <li>
                             <label>Amount:</label>

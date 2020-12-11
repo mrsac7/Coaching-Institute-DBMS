@@ -42,4 +42,34 @@ public class UserRepository {
             return null;
         }
     }        
+
+    public void enableUser(String username) {
+        String sql = "UPDATE user SET enabled = b'1' WHERE username = ?";
+        jdbcTemplate.update(sql, username);
+    }
+
+    public void disableUser(String username) {
+        String sql = "UPDATE user SET enabled = b'0' WHERE username = ?";
+        jdbcTemplate.update(sql, username);
+    }
+
+    public void deleteUser(String username) {
+        String sql = "DELETE FROM user WHERE username = ?";
+        jdbcTemplate.update(sql, username);
+    }
+
+    public List<User> getAllTeachers() {
+        String sql = "SELECT * FROM user WHERE role = 'ROLE_TEACHER' and enabled=1";
+        try {
+            return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(User.class));
+        }
+        catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public void updatePassword(User user) {
+        String sql = "UPDATE user SET password = ? WHERE username = ?";
+        jdbcTemplate.update(sql, new Object[] {user.getPassword(), user.getUsername()});
+    }
 }

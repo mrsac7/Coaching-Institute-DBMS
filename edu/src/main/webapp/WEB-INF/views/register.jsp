@@ -38,7 +38,7 @@
     </div>
     <div id="content_header"></div>
     <div id="site_content">
-      <jsp:include page="sidebar.jsp"/>
+      <!-- <jsp:include page="sidebar.jsp"/> -->
       <div class="content">
           <h1>Register User</h1>
           <p>${message}</p>

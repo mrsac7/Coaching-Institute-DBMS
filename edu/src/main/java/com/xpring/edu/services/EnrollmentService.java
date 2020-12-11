@@ -1,5 +1,6 @@
 package com.xpring.edu.services;
 
+import java.util.List;
 import com.xpring.edu.model.Enrollment;
 import com.xpring.edu.repository.EnrollmentRepository;
 
@@ -13,5 +14,9 @@ public class EnrollmentService {
 
     public void saveEnrollment(Enrollment enrollment) {
         enrollmentRepository.saveEnrollment(enrollment);
+    }
+
+    public List<Enrollment> getAll() {
+        return enrollmentRepository.getAll();
     }
 }

@@ -3,6 +3,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
+
 <!DOCTYPE HTML>
 <html>
 
@@ -31,48 +32,42 @@
                                 <li>
                                     <a href="/courses">Courses <i class="fa fa-caret-right"></i></a>
                                     <ul id="subsub-menu">
-                                        <li><a href="/course/ix">Class IX</a></li>
-                                        <li><a href="/course/x">Class X</a></li>
-                                        <li><a href="/course/xi">Class XI</a></li>
-                                        <li><a href="/course/xii">Class XII</a></li>
+                                        <li><a href="#">Class IX</a></li>
+                                        <li><a href="#">Class X</a></li>
+                                        <li><a href="#">Class XI</a></li>
+                                        <li><a href="#">Class XII</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="/test">Tests</a></li>
-                                <li><a href="/view_enrollment">Enrollment</a></li>
+                                <li><a href="/tests">Tests</a></li>
+                                <li><a href="/enrollment">Enrollment</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a>Attendance <i class="fa fa-caret-down"></i></a>
-                            <ul id="sub-menu">
-                                <li><a href="/teacher_attendance">Teacher Attendance</a></li>
-                                <li><a href="/student_attendance">Student Attendance</a></li>
-                            </ul>
-                        </li>
+                        <li><a href="/attendance">Attendance</a></li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
                         <li>
                             <a class="dropdown" href="#">Courses <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
-                                <li><a href="/course/ix">Class IX</a></li>
-                                <li><a href="/course/x">Class X</a></li>
-                                <li><a href="/course/xi">Class XI</a></li>
-                                <li><a href="/course/xii">Class XII</a></li>
+                                <li><a href="#">Class IX</a></li>
+                                <li><a href="#">Class X</a></li>
+                                <li><a href="#">Class XI</a></li>
+                                <li><a href="#">Class XII</a></li>
                             </ul>
                         </li>
                         <li><a href="/attendance/${user.username}">Attendance</a></li>
-                        <li><a href="/result/${user.username}">Result</a></li>
-                        <li><a href="/enrollment/${user.username}">Enrollment</a></li>
+                        <li><a href="/tests">Result</a></li>
+                        <li><a href="/enrollment">Enrollment</a></li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
                         <li>
                             <a>Attendance <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
                                 <li><a href="/attendance/${user.username}">View Attendance</a></li>
-                                <li><a href="/student_attendance">Student Attendance</a></li>
+                                <li><a href="/take_attendance">Take Attendance</a></li>
                             </ul>
                         </li>
                         <li><a href="/test">Test</a></li>
-                        <li class="selected"><a href="/payroll/${user.username}">Payroll</a></li>
+                        <li><a href="/payroll">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -91,41 +86,43 @@
         <div id="site_content">
             <jsp:include page="sidebar.jsp" />
             <div class="content">
-                <h1>Add Payroll</h1>
+                <h1>View Payroll</h1>
                 <p>${message}</p>
-                <form action="/payroll/add" method="POST">
-                    <ul class="ver-table">
-                        <li>
-                            <label>Reference No:</label>
-                            <span><input type="text" name="refNo" placeholder="Reference No" /></span>
-                        </li>
-                        <li>
-                            <label>Teacher:</label>
-                            <span>
-                                <select id="id" name="teacherID" aria-placeholder="Teacher ID">
-                                    <c:forEach items="${allTeacher}" var="teacher">
-                                        <option value="${teacher.teacherID}">${teacher.teacherID} - ${teacher.firstName} ${teacher.middleName} ${teacher.lastName}</option>
-                                    </c:forEach>
-                                </select>
-                            </span>
-                        </li>
-                        <li>
-                            <label>Month:</label>
-                            <span><input type="month" name="sdate" placeholder="Service Date"></span>
-                        </li>
-                        <li>
-                            <label>Date Credited:</label>
-                            <span><input type="date" name="creditDate" placeholder="Credit Date"></span>
-                        </li>
-                        <li>
-                            <label>Amount:</label>
-                            <span><input type="number" name="amount" placeholder="Amount"></span>
-                        </li>
-                    </ul>
-                    <div class="container">
-                        </span><input class="submit button" type="submit" value="Proceed" />
-                    </div>
-                </form>
+                <ul class="ver-table">
+                    <li>
+                        <label>Teacher ID:</label>
+                        <span>${teacher.teacherID}</span>
+                    </li>
+                    <li>
+                        <label>Teacher Name:</label>
+                        <span>${teacher.firstName} ${teacher.middleName} ${teacher.lastName}</span>
+                    </li>
+                </ul>
+                <table class="hor-table" style="margin-top: 30px;">
+                    <thead>
+                        <tr>
+                            <th>Ref. No</th>
+                            <th>Month</th>
+                            <th>Date Credited</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${list}" var="payroll">
+                            <tr>
+                                <td>${payroll.refNo}</td>
+                                <td>
+                                    <fmt:formatDate pattern="MMM/yyyy" value="${payroll.serviceDate}" />
+                                </td>
+                                <td>
+                                    <fmt:formatDate pattern="dd-MM-yyyy" value="${payroll.creditDate}" />
+                                </td>
+                                <td>&#x20B9;${payroll.amount}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
             </div>
         </div>
         <jsp:include page="footer.jsp" />

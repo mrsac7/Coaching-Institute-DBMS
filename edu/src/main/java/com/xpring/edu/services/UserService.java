@@ -29,4 +29,25 @@ public class UserService {
    public User getUser(String username) {
        return userRepository.getUser(username);
    }
+
+   public void enableUser(String username) {
+       userRepository.enableUser(username);
+   }
+
+   public void disableUser(String username) {
+       userRepository.disableUser(username);
+   }
+
+   public void deleteUser(String username) {
+       userRepository.deleteUser(username);
+   }
+
+   public List<User> getAllTeachers() {
+       return userRepository.getAllTeachers();
+   }
+
+   public void updatePassword(User user) {
+       userRepository.updatePassword(user);
+   }
 }
+

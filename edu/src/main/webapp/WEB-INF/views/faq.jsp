@@ -6,8 +6,11 @@
 <html>
 
 <head>
-    <title>Home - StarCoaching</title>
-    <link rel="stylesheet" type="text/css" href="style/style.css" />
+    <title>FAQs - StarCoaching</title>
+    <meta name="description" content="website description" />
+    <meta name="keywords" content="website keywords, website keywords" />
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+    <link rel="stylesheet" type="text/css" href="/style/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -17,7 +20,7 @@
             <jsp:include page="logo.jsp" />
             <div id="menubar">
                 <ul id="menu">
-                    <li class="selected"><a href="/">Home</a></li>
+                    <li><a href="/">Home</a></li>
                     <sec:authentication var="user" property="principal" />
                     <sec:authorize access="hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/users">Users</a></li>
@@ -34,11 +37,17 @@
                                         <li><a href="#">Class XII</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="/tests">Tests</a></li>
+                                <li><a href="/test">Tests</a></li>
                                 <li><a href="/enrollment">Enrollment</a></li>
                             </ul>
                         </li>
-                        <li><a href="/attendance">Attendance</a></li>
+                        <li>
+                            <a>Attendance <i class="fa fa-caret-down"></i></a>
+                            <ul id="sub-menu">
+                                <li><a href="/teacher_attendance">Teacher Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
+                            </ul>
+                        </li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
                         <li>
@@ -51,19 +60,19 @@
                             </ul>
                         </li>
                         <li><a href="/attendance/${user.username}">Attendance</a></li>
-                        <li><a href="/tests">Result</a></li>
-                        <li><a href="/enrollment">Enrollment</a></li>
+                        <li><a href="/result/${user.username}">Result</a></li>
+                        <li><a href="/enrollment/${user.username}">Enrollment</a></li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
                         <li>
                             <a>Attendance <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
                                 <li><a href="/attendance/${user.username}">View Attendance</a></li>
-                                <li><a href="/take_attendance">Take Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
                             </ul>
                         </li>
                         <li><a href="/test">Test</a></li>
-                        <li><a href="#">Payroll</a></li>
+                        <li><a href="/payroll/${user.username}">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -81,20 +90,51 @@
         <div id="content_header"></div>
         <div id="site_content">
             <div id="banner"></div>
-            <jsp:include page="sidebar.jsp" />
+            <div id="sidebar_container">
+                <div class="sidebar_item">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li>&#8212;&nbsp;&nbsp;<a href="/teacher">All Teachers</a></li>
+                        <sec:authorize access="isAuthenticated()">
+                            <li>&#8212;&nbsp;&nbsp;<a href="#">Study Materials</a></li>
+                            <li>&#8212;&nbsp;&nbsp;<a href="/change_password">Change Password</a></li>
+                        </sec:authorize>
+                        <li>&#8212;&nbsp;&nbsp;<a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar_item" style="padding-bottom: 50px;">
+                    <h3>Notifications</h3>
+                    <div>
+                        <ul id="small-button">
+                            <li>
+                                <a href="/notification/add">
+                                    <input type="submit" value="Add" />
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="clear:both;">
+                        <c:forEach items="${list}" var="notification">
+                            <span style="display:block; margin-bottom: 5px;"><span
+                                    style="color:#1a73e8">${notification.emailID}</span> &#8212; <a
+                                    href="notification/${notification.notificationID}"
+                                    style="text-decoration: underline;">${notification.header}</a>
+                            </span>
+                        </c:forEach>
+                    </div>
+                </div>
+            </div>
+            <!-- <include src="sidebar.jsp"></include> -->
             <div class="content">
-                <h1>Welcome to Star Coaching Institute</h1>
-                <h2>The Vision Kids Planet School Experience</h2>
-                <p>The Vision Kids Planet Schoo experience will help each child to be knowledgeable, wise, curious and
-                    creative, responsible and confident. It is our endeavour to help each child evolve into well-rounded
-                    learners with minds that remain receptive to new ideas and changing needs. To accomplish this, we
-                    have designed an integrated curriculum that allows students to learn in great depth as well as see
-                    connections that naturally exist among subject areas making learning more meaningful and effective.
-                    Taking pioneering steps in establishing a boutique educational Institution</p>
-                <h2>VKP Bhilwara, Rajasthan</h2>
-                <p>The school's role goes beyond imparting only curriculum-based knowledge. It creates and maintains an
-                    environment that allows the individual student to develop himself/herself while acquiring the skills
-                    and attitude required evolving into an active and responsible citizen.</p>
+                <h1>FAQs</h1>
+                <h4>How to Use The Site?</h4>
+                <p>Students and Teachers have to register on the site.</p>
+                <h4>How to enroll?</h4>
+                <p>Students can enroll on the site through the enrollment portal.</p>
+                <h4>How to take attendance?</h4>
+                <p>Teachers can take attendance on the site through the attendance portal.</p>
+                <h4>How to view results?</h4>
+                <p>Results can be viewed from the test and result portal.</p>
             </div>
         </div>
         <jsp:include page="footer.jsp" />

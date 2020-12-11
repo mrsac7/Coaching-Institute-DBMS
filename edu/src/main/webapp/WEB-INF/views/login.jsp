@@ -34,8 +34,8 @@
       </div>
     </div>
     <div id="content_header"></div>
-    <div id="site_content">
-      <jsp:include page="sidebar.jsp"/>
+    <div id="site_content" style="margin-bottom: 80px;">
+      <!-- <jsp:include page="sidebar.jsp"/> -->
       <div class="content">
           <h1>Login</h1>
           <p>${message}</p>  

@@ -25,46 +25,54 @@
                     <sec:authorize access="hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/users">Users</a></li>
                         <li><a href="/payroll">Payroll</a></li>
-                        <li>
+                        <li class="selected">
                             <a class="dropdown" href="#">Academics <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
                                 <li>
                                     <a href="/courses">Courses <i class="fa fa-caret-right"></i></a>
                                     <ul id="subsub-menu">
-                                        <li><a href="#">Class IX</a></li>
-                                        <li><a href="#">Class X</a></li>
-                                        <li><a href="#">Class XI</a></li>
-                                        <li><a href="#">Class XII</a></li>
+                                        <li><a href="/course/ix">Class IX</a></li>
+                                        <li><a href="/course/x">Class X</a></li>
+                                        <li><a href="/course/xi">Class XI</a></li>
+                                        <li><a href="/course/xii">Class XII</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="/tests">Tests</a></li>
-                                <li><a href="/enrollment">Enrollment</a></li>
+                                <li><a href="/test">Tests</a></li>
+                                <li><a href="/view_enrollment">Enrollment</a></li>
                             </ul>
                         </li>
-                        <li><a href="/attendance">Attendance</a></li>
+                        <li>
+                            <a>Attendance <i class="fa fa-caret-down"></i></a>
+                            <ul id="sub-menu">
+                                <li><a href="/teacher_attendance">Teacher Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
+                            </ul>
+                        </li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
                         <li>
                             <a class="dropdown" href="#">Courses <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
-                                <li><a href="#">Class IX</a></li>
-                                <li><a href="#">Class X</a></li>
-                                <li><a href="#">Class XI</a></li>
-                                <li><a href="#">Class XII</a></li>
+                                <li><a href="/course/ix">Class IX</a></li>
+                                <li><a href="/course/x">Class X</a></li>
+                                <li><a href="/course/xi">Class XI</a></li>
+                                <li><a href="/course/xii">Class XII</a></li>
                             </ul>
                         </li>
-                        <li><a href="/tests">Result</a></li>
-                        <li><a href="/enrollment">Enrollment</a></li>
+                        <li><a href="/attendance/${user.username}">Attendance</a></li>
+                        <li class="selected"><a href="/result/${user.username}">Result</a></li>
+                        <li><a href="/enrollment/${user.username}">Enrollment</a></li>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
                         <li>
                             <a>Attendance <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
-                                <li><a href="#">View Attendance</a></li>
-                                <li><a href="/take_attenance">Take Attendance</a></li>
+                                <li><a href="/attendance/${user.username}">View Attendance</a></li>
+                                <li><a href="/student_attendance">Student Attendance</a></li>
                             </ul>
                         </li>
                         <li class="selected"><a href="/test">Test</a></li>
+                        <li><a href="/payroll/${user.username}">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -78,94 +86,95 @@
                     </sec:authorize>
                 </ul>
             </div>
-            <div id="content_header"></div>
-            <div id="site_content">
-                <jsp:include page="sidebar.jsp" />
-                <div class="content">
-                    <h1>Result</h1>
-                    <p>${message}</p>
-                    <ul class="ver-table">
-                        <li>
-                            <label>Test ID:</label>
-                            <span>${test.testID}</span>
-                        </li>
-                        <li>
-                            <label>Test Name:</label>
-                            <span>${test.testName}</span>
-                        </li>
-                        <li>
-                            <label>Course:</label>
-                            <span>${test.courseID}</span>
-                        </li>
-                        <li>
-                            <label>Total Marks:</label>
-                            <span>${test.marks}</span>
-                        </li>
-                    </ul>
-                    <div style="margin-top: 50px">
-                        <table class="hor-table">
-                            <thead>
+        </div>
+        <div id="content_header"></div>
+        <div id="site_content">
+            <jsp:include page="sidebar.jsp" />
+            <div class="content">
+                <h1>Result</h1>
+                <p>${message}</p>
+                <ul class="ver-table">
+                    <li>
+                        <label>Test ID:</label>
+                        <span>${test.testID}</span>
+                    </li>
+                    <li>
+                        <label>Test Name:</label>
+                        <span>${test.testName}</span>
+                    </li>
+                    <li>
+                        <label>Course:</label>
+                        <span>${test.courseID}</span>
+                    </li>
+                    <li>
+                        <label>Total Marks:</label>
+                        <span>${test.marks}</span>
+                    </li>
+                </ul>
+                <div style="margin-top: 50px">
+                    <table class="hor-table">
+                        <thead>
+                            <tr>
+                                <th>StudentID</th>
+                                <th>Student Name</th>
+                                <th>Marks</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${resultList}" var="result">
                                 <tr>
-                                    <th>StudentID</th>
-                                    <th>Student Name</th>
-                                    <th>Marks</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach items="${resultList}" var="result">
-                                    <tr>
-                                        <td>${result.studentID}</td>
-                                        <td>${result.firstName} ${result.middleName} ${result.lastName}</td>
-                                        <c:choose>
-                                            <c:when test = "${result.studentID == toEdit}">
-                                                <form action="/test/${test.testID}/result/edit/${result.studentID}" method="POST" class="form-button">
-                                                    <td>
-                                                        <c:choose>
-                                                            <c:when test="${result.marks >= 0}">
-                                                                <input style="width: 50px" type="number" name="marks" value="${result.marks}">
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <input style="width: 50px" type="number" name="marks" value="0">
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                    <td class="inp">
-                                                        <input name="testID" value="${result.testID}" style="display:none;">
-                                                        <input name="studentID" value="${result.studentID}" style="display: none">
-                                                        <input style="border: 1px solid  #1a73e8;color: #1a73e8;" type="submit" name="status" value="Proceed" />
-                                                    </td>
-                                                </form>
-                                            </c:when>
-                                            <c:otherwise>
+                                    <td>${result.studentID}</td>
+                                    <td>${result.firstName} ${result.middleName} ${result.lastName}</td>
+                                    <c:choose>
+                                        <c:when test = "${result.studentID == toEdit}">
+                                            <form action="/test/${test.testID}/result/edit/${result.studentID}" method="POST" class="form-button">
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${result.marks >= 0}">
-                                                            ${result.marks}
+                                                            <input style="width: 50px" type="number" name="marks" value="${result.marks}">
                                                         </c:when>
                                                         <c:otherwise>
-                                                            N/A
+                                                            <input style="width: 50px" type="number" name="marks" value="0">
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
-                                                <td>
-                                                    <span>
-                                                        <form action="/test/${test.testID}/result/edit/${result.studentID}" class="form-button">
-                                                            <input style="border: 1px solid  #1a73e8;color: #1a73e8;" type="submit" value="Edit">
-                                                        </form>
-                                                    </span>
+                                                <td class="inp">
+                                                    <input name="testID" value="${result.testID}" style="display:none;">
+                                                    <input name="studentID" value="${result.studentID}" style="display: none">
+                                                    <input style="border: 1px solid  #1a73e8;color: #1a73e8;" type="submit" name="status" value="Proceed" />
                                                 </td>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
+                                            </form>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${result.marks >= 0}">
+                                                        ${result.marks}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        N/A
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>
+                                                <span>
+                                                    <form action="/test/${test.testID}/result/edit/${result.studentID}" class="form-button">
+                                                        <input style="border: 1px solid  #1a73e8;color: #1a73e8;" type="submit" value="Edit">
+                                                    </form>
+                                                </span>
+                                            </td>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <jsp:include page="footer.jsp" />
         </div>
+        <jsp:include page="footer.jsp" />
+    </div>
 </body>
 
 </html>

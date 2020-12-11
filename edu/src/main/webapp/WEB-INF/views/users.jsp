@@ -53,6 +53,8 @@
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Role</th>
+                                <th>Enabled</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,6 +64,39 @@
                                     <td>${user.username}</td>
                                     <td>${user.email}</td>
                                     <td>${user.role}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${user.enabled == 'true'}">
+                                                Yes
+                                            </c:when>
+                                            <c:otherwise>
+                                                No
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <form action="/profile/${user.username}" class="form-button">
+                                                <input style="border: 1px solid  #1a73e8;color: #1a73e8;" type="submit" value="Profile">
+                                            </form>
+                                            <c:choose>
+                                                <c:when test="${user.enabled == 'false'}">
+                                                    <form action="/enable/${user.username}" class="form-button" method="POST">
+                                                        <input type="submit" value="Enable">
+                                                    </form>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <form action="/disable/${user.username}" class="form-button" method="POST">
+                                                        <input type="submit" value="Disable">
+                                                    </form>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <form action="/delete/${user.username}" method="POST" class="form-button" method="POST">
+                                                <input style="border: 1px solid red;color:red;" type="submit" value="Delete">
+                                            </form>
+                                        </span>
+                                    </td>
+
                                 </tr>
                             </c:forEach>
                         </tbody>

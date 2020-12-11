@@ -34,4 +34,8 @@ public class PayrollService {
     public void deletePayroll(String refNo) {
         payrollRepository.deletePayroll(refNo);
     }
+
+    public List<Payroll> getAllPayroll(int teacherID) {
+        return payrollRepository.getAllPayroll(teacherID);
+    }
 }

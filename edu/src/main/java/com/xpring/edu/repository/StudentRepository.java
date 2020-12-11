@@ -31,6 +31,17 @@ public class StudentRepository {
             return null;
         }
     }
+
+    public Student getStudentByID(int studentID) {
+        try {
+            String sql = "SELECT * FROM Student WHERE studentID = " + studentID;
+            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Student.class));
+        }
+        catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
     public void updateStudent(Student student) {
         String sql = "UPDATE Student SET first_name = ?, middle_name = ?, last_name = ?, sex = ?, date_of_birth = ?, contact_no = ?, house_no = ?, street = ?, city = ?,pin = ? WHERE studentID ="+student.getStudentID();
         jdbcTemplate.update(sql, new Object[] {student.getFirstName(), student.getMiddleName(), student.getLastName(), student.getSex(), student.getDateOfBirth(), student.getContactNo(), student.getHouseNo(), student.getStreet(), student.getCity(), student.getPin()});

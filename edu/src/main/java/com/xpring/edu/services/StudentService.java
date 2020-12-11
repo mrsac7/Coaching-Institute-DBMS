@@ -20,14 +20,18 @@ public class StudentService {
         return studentRepository.getStudentByUsername(username);
     }
 
+    public Student getStudentByID(int studentID) {
+        return studentRepository.getStudentByID(studentID);
+    }
+
     public void createStudentAndGuardianByUsername(String username) {
         Student student = new Student();
         student.setUsername(username);
         studentRepository.saveStudent(student);
         student = getStudentByUsername(username);
-        // System.out.println("hello: "+student.getStudentID());
         guardianService.createGuardianByStudentID(student.getStudentID());
     }
+
     public void updateStudent(Student student) {
         studentRepository.updateStudent(student);
     }

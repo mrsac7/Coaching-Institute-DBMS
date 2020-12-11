@@ -23,4 +23,17 @@ public class TeacherAttendanceService {
         String endDate = date + "-" + days;
         return teacherAttendanceRepository.getTeacherAttendance(teacherID, startDate, endDate);
     }
+
+    public List<TeacherAttendance> getAttendance(String date) {
+        return teacherAttendanceRepository.getAttendance(date);
+    }
+
+    public void saveAttendance(TeacherAttendance attendance) {
+        teacherAttendanceRepository.saveAttendance(attendance);
+    }
+
+    public void removeAttendance(TeacherAttendance attendance) {
+        teacherAttendanceRepository.removeAttendance(attendance);
+    }
+
 }

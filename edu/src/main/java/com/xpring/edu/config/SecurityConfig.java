@@ -26,11 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/", "/home", "/register", "/process_register", "/style/**", "/students", "/students/search", "/employees",
-                        "/employees/search", "/students/class/{^[0-9]+$}/", "/classes")
+                .antMatchers("/", "/home", "/teacher", "/faq", "/register", "/process_register", "/style/**")
                 .permitAll()
-                .antMatchers("/employees/{^[0-9]+$}/", "/students/{^[0-9]+$}/", "/classes/**", "/subjects/**",
-                        "/exams/**", "/results/**", "/credentials/change", "/credentials/{^[a-zA-Z0-9]+$}/change", "/test", "/edit_test", "/edit_test/{^[a-zA-Z0-9]+$}")
+                .antMatchers("/test", "/edit_test", "/edit_test/{^[a-zA-Z0-9]+$}")
                 .hasAnyAuthority("ROLE_ADMIN", "ROLE_TEACHER")
                 .antMatchers("/credentials/**", "/employees/new", "/employees/{^[0-9]+$}/edit", "/students/new",
                         "/students/{^[0-9]+$}/edit")

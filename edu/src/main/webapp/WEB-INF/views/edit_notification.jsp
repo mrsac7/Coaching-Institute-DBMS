@@ -7,7 +7,7 @@
 <html>
 
 <head>
-    <title>Payroll - StarCoaching</title>
+    <title>Notification - StarCoaching</title>
     <meta name="description" content="website description" />
     <meta name="keywords" content="website keywords, website keywords" />
     <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
@@ -24,7 +24,7 @@
                     <sec:authentication var="user" property="principal" />
                     <sec:authorize access="hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/users">Users</a></li>
-                        <li class="selected"><a href="/payroll">Payroll</a></li>
+                        <li><a href="/payroll">Payroll</a></li>
                         <li>
                             <a class="dropdown" href="#">Academics <i class="fa fa-caret-down"></i></a>
                             <ul id="sub-menu">
@@ -72,7 +72,7 @@
                             </ul>
                         </li>
                         <li><a href="/test">Test</a></li>
-                        <li class="selected"><a href="/payroll/${user.username}">Payroll</a></li>
+                        <li><a href="/payroll/${user.username}">Payroll</a></li>
                     </sec:authorize>
                     <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
                         <li><a href="/profile/${user.username}">Profile</a></li>
@@ -91,38 +91,22 @@
         <div id="site_content">
             <jsp:include page="sidebar.jsp" />
             <div class="content">
-                <h1>Add Payroll</h1>
+                <h1>Edit Notification</h1>
                 <p>${message}</p>
-                <form action="/payroll/add" method="POST">
+                <form action="/notification/${notification.notificationID}/edit" method="POST">
                     <ul class="ver-table">
                         <li>
-                            <label>Reference No:</label>
-                            <span><input type="text" name="refNo" placeholder="Reference No" /></span>
+                            <label>Header:</label>
+                            <span><input type="text" name="header" placeholder="Header" value="${notification.header}" /></span>
                         </li>
                         <li>
-                            <label>Teacher:</label>
-                            <span>
-                                <select id="id" name="teacherID" aria-placeholder="Teacher ID">
-                                    <c:forEach items="${allTeacher}" var="teacher">
-                                        <option value="${teacher.teacherID}">${teacher.teacherID} - ${teacher.firstName} ${teacher.middleName} ${teacher.lastName}</option>
-                                    </c:forEach>
-                                </select>
-                            </span>
-                        </li>
-                        <li>
-                            <label>Month:</label>
-                            <span><input type="month" name="sdate" placeholder="Service Date"></span>
-                        </li>
-                        <li>
-                            <label>Date Credited:</label>
-                            <span><input type="date" name="creditDate" placeholder="Credit Date"></span>
-                        </li>
-                        <li>
-                            <label>Amount:</label>
-                            <span><input type="number" name="amount" placeholder="Amount"></span>
+                            <label>Body:</label>
+                            <span><textarea name="body" rows="10" placeholder="Body" cols="60" value="${notification.body}"></textarea></span>
                         </li>
                     </ul>
                     <div class="container">
+                        <input value="${notification.emailID}" name = "emailID" style="display:none" />
+                        <input value="${notification.notificationID}" name="notificationID" style="display:none" />
                         </span><input class="submit button" type="submit" value="Proceed" />
                     </div>
                 </form>

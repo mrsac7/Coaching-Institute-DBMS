@@ -28,42 +28,48 @@
                 <li>
                   <a href="/courses">Courses <i class="fa fa-caret-right"></i></a>
                   <ul id="subsub-menu">
-                    <li><a href="#">Class IX</a></li>
-                    <li><a href="#">Class X</a></li>
-                    <li><a href="#">Class XI</a></li>
-                    <li><a href="#">Class XII</a></li>
+                    <li><a href="/course/ix">Class IX</a></li>
+                    <li><a href="/course/x">Class X</a></li>
+                    <li><a href="/course/xi">Class XI</a></li>
+                    <li><a href="/course/xii">Class XII</a></li>
                   </ul>
                 </li>
                 <li><a href="/test">Tests</a></li>
-                <li><a href="/enrollment">Enrollment</a></li>
+                <li><a href="/view_enrollment">Enrollment</a></li>
               </ul>
             </li>
-            <li><a href="/attendance">Attendance</a></li>
+            <li>
+              <a>Attendance <i class="fa fa-caret-down"></i></a>
+              <ul id="sub-menu">
+                <li><a href="/teacher_attendance">Teacher Attendance</a></li>
+                <li><a href="/student_attendance">Student Attendance</a></li>
+              </ul>
+            </li>
           </sec:authorize>
           <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
             <li>
               <a class="dropdown" href="#">Courses <i class="fa fa-caret-down"></i></a>
               <ul id="sub-menu">
-                <li><a href="#">Class IX</a></li>
-                <li><a href="#">Class X</a></li>
-                <li><a href="#">Class XI</a></li>
-                <li><a href="#">Class XII</a></li>
+                <li><a href="/course/ix">Class IX</a></li>
+                <li><a href="/course/x">Class X</a></li>
+                <li><a href="/course/xi">Class XI</a></li>
+                <li><a href="/course/xii">Class XII</a></li>
               </ul>
             </li>
             <li><a href="/attendance/${user.username}">Attendance</a></li>
             <li><a href="/result/${user.username}">Result</a></li>
-            <li><a href="/enrollment">Enrollment</a></li>
+            <li><a href="/enrollment/${user.username}">Enrollment</a></li>
           </sec:authorize>
           <sec:authorize access="hasRole('ROLE_TEACHER') and isAuthenticated()">
             <li>
               <a>Attendance <i class="fa fa-caret-down"></i></a>
               <ul id="sub-menu">
                 <li><a href="/attendance/${user.username}">View Attendance</a></li>
-                <li><a href="/take_attendance">Take Attendance</a></li>
+                <li><a href="/student_attendance">Student Attendance</a></li>
               </ul>
             </li>
             <li><a href="/test">Test</a></li>
-            <li><a href="#">Payroll</a></li>
+            <li><a href="/payroll/${user.username}">Payroll</a></li>
           </sec:authorize>
           <sec:authorize access="!hasRole('ROLE_ADMIN') and isAuthenticated()">
             <li><a href="/profile/${user.username}">Profile</a></li>
@@ -81,13 +87,45 @@
     <div id="content_header"></div>
     <div id="site_content">
       <div id="banner"></div>
-      <jsp:include page="sidebar.jsp"/>
+      <div id="sidebar_container">
+        <div class="sidebar_item">
+          <h3>Quick Links</h3>
+          <ul>
+            <li>&#8212;&nbsp;&nbsp;<a href="/teacher">All Teachers</a></li>
+            <sec:authorize access="isAuthenticated()">
+              <li>&#8212;&nbsp;&nbsp;<a href="/change_password">Change Password</a></li>
+            </sec:authorize>
+            <li>&#8212;&nbsp;&nbsp;<a href="/faq">FAQs</a></li>
+          </ul>
+        </div>
+        <div class="sidebar_item" style="padding-bottom: 50px;">
+          <h3>Notifications</h3>
+          <sec:authorize access="!hasRole('ROLE_STUDENT') and isAuthenticated()">
+            <div>
+              <ul id="small-button">
+                <li>
+                  <a href="/notification/add">
+                    <input type="submit" value="Add" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </sec:authorize>
+          <div style="clear:both;">
+            <c:forEach items="${list}" var="notification">
+              <span style="display:block; margin-bottom: 5px;"><span style="color:#1a73e8">${notification.emailID}</span> &#8212; <a href="notification/${notification.notificationID}" style="text-decoration: underline;">${notification.header}</a>
+              </span>
+            </c:forEach>
+          </div>
+        </div>
+      </div>
+      <!-- <include src="sidebar.jsp"></include> -->
       <div class="content">
         <h1>Welcome to Star Coaching Institute</h1>
-        <h2>The Vision Kids Planet School Experience</h2>
-        <p>The Vision Kids Planet Schoo experience will help each child to be knowledgeable, wise, curious and creative, responsible and confident. It is our endeavour to help each child evolve into well-rounded learners with minds that remain receptive to new ideas and changing needs. To accomplish this, we have designed an integrated curriculum that allows students to learn in great depth as well as see connections that naturally exist among subject areas making learning more meaningful and effective. Taking pioneering steps in establishing a boutique educational Institution</p>
-        <h2>VKP Bhilwara, Rajasthan</h2>
-        <p>The school's role goes beyond imparting only curriculum-based knowledge. It creates and maintains an environment that allows the individual student to develop himself/herself while acquiring the skills and attitude required evolving into an active and responsible citizen.</p>
+        <h2>About Us</h2>
+        <p>Star Coaching Institute will help students to be knowledgeable, wise, curious and creative, responsible and confident. It is our endeavour to help students evolve into well-rounded learners with minds that remain receptive to new ideas and changing needs. To accomplish this, we have designed an integrated curriculum that allows students to learn in great depth as well as see connections that naturally exist among subject areas making learning more meaningful and effective. Taking pioneering steps in establishing a inspiring educational Institution</p>
+  
+        <p>For the past two years, we have been constantly putting efforts and have achieved great results. We will continue this endeavour for the coming years and wish all students achieve great excellence.</p>
       </div>
     </div>
     <jsp:include page="footer.jsp"/>
